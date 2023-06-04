@@ -199,7 +199,7 @@ label_status.pack(pady=5)
 button_login = tk.Button(
     root,
     text="Iniciar sesión",
-    command=lambda: login(root, label_status, entry_usuario, entry_contraseña),
+    command=lambda: login(root, label_status, entry_usuario.get(), entry_contraseña.get()),
     bg=color_secundario,
     fg="black",
 )
