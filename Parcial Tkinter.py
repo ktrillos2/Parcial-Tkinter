@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import ImageTk, Image
 
 usuarios = [
     ["admin@email.com", "admin123", "admin", ["", "", True, "", ""]],
@@ -27,6 +28,11 @@ class Admin:
     def __init__(self):
         self.usuario = "usuario"
 
+    def volver(self, root):
+        for widget in root.winfo_children():
+            widget.destroy()
+        login()
+
     def Ventana_Principal(self, root):
         root.configure(bg="SystemButtonFace")
         root.title("Barra de Herramientas")
@@ -40,6 +46,11 @@ class Admin:
         barra.add_command(label="Opción 2", command=self.opcion2)
         barra.add_command(label="Opción 3", command=self.opcion3)
         barra.add_command(label="Opción 4", command=self.opcion4)
+
+        # Crear un botón de regresar
+        button_regresar = tk.Button(
+            root, text="↤", command=lambda: self.volver(root))
+        button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
 
         # Etiqueta para mostrar la opción seleccionada
         self.label = tk.Label(root, text="Seleccione una opción")
@@ -104,13 +115,12 @@ def login():
         label_status.config(
             text="Usuario no existe, ¿desea registrarse?",
             fg="red",
-            bg=color_principal,
         )
 
 
 root = tk.Tk()
 root.title("Inicio de sesión")
-root.geometry("300x200")
+root.geometry("800x600")
 
 # Colores
 color_principal = "#FF6D60"
@@ -118,30 +128,32 @@ color_secundario = "#F7D060"
 color_terciario = "#F3E99F"
 color_cuarto = "#98D8AA"
 
-root.configure(bg=color_principal)
 
-# Etiquetas
-label_title = tk.Label(
-    root, text="Inicio de sesión", font=("Arial", 16), bg=color_principal, fg="white"
-)
-label_title.pack(pady=10)
+# Crear la imagen de fondo
+image = Image.open("./Logo.png")
+background_image = ImageTk.PhotoImage(image)
 
-label_username = tk.Label(root, text="Usuario:",
-                          bg=color_principal, fg="white")
-label_username.pack()
+# Crear el widget Label con la imagen de fondo
+background_label = tk.Label(root, image=background_image)
+background_label.place(x=0, y=-150, relwidth=1, relheight=1)
+
+
+
+
+label_username = tk.Label(root, text="Usuario", fg="black",font=("Arial", 11, "bold"))
+label_username.pack(pady=(250, 0))
 
 # Entradas de texto
 entry_usuario = tk.Entry(root)
 entry_usuario.pack()
 
-label_password = tk.Label(root, text="Contraseña:",
-                          bg=color_principal, fg="white")
+label_password = tk.Label(root, text="Contraseña", fg="black",font=("Arial", 11, "bold"))
 label_password.pack()
 
 entry_contraseña = tk.Entry(root, show="*")
 entry_contraseña.pack()
 
-label_status = tk.Label(root, text="", bg=color_principal, fg="white")
+label_status = tk.Label(root, text="", fg="black")
 label_status.pack(pady=5)
 
 # Botón
@@ -150,10 +162,10 @@ button_login = tk.Button(
     text="Iniciar sesión",
     command=login,
     bg=color_secundario,
-    fg="white",
+    fg="black",
     activebackground=color_cuarto,
-    activeforeground="white",
+    activeforeground="white"
 )
-button_login.pack(pady=10)
+button_login.pack(pady=5,ipadx=5,ipady=5)
 
 root.mainloop()
