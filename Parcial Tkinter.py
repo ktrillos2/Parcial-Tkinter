@@ -3,10 +3,8 @@ from PIL import ImageTk, Image
 
 usuarios = [
     ["admin@email.com", "admin123", "admin", ["", "", True, "", ""]],
-    ["cajero1@email.com", "cajero1", "cajero",
-        ["prueba", "123456789", True, "", ""]],
-    ["cajero2@email.com", "cajero2", "cajero",
-        ["prueba2", "1234567891", True, "", ""]],
+    ["cajero1@email.com", "cajero1", "cajero", ["prueba", "123456789", True, "", ""]],
+    ["cajero2@email.com", "cajero2", "cajero", ["prueba2", "1234567891", True, "", ""]],
     [
         "angel@gmail.com",
         "contra",
@@ -43,7 +41,7 @@ class Admin:
         Inicio_sesion()
 
     def Ventana_Principal(self, root):
-        root.configure(bg="SystemButtonFace")
+        root.configure(bg=color_terciario)
         root.title("Barra de Herramientas")
 
         # Crear una barra de herramientas
@@ -70,7 +68,7 @@ class Admin:
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
 
         # Etiqueta para mostrar la opción seleccionada
-        self.label = tk.Label(root, text="Seleccione una opción")
+        self.label = tk.Label(root, text="Seleccione una opción",bg=color_terciario)
         self.label.pack(padx=10, pady=10)
 
         root.mainloop()
@@ -98,9 +96,7 @@ class Usuario:
         pass
 
 
-def login(root, label_status, entryUsuario, entryContraseña):
-    usuario = entryUsuario.get()
-    contraseña = entryContraseña.get()
+def login(root, label_status, usuario, contraseña):
 
     encontrado = False
     habilitado = False
@@ -134,6 +130,7 @@ def login(root, label_status, entryUsuario, entryContraseña):
 
 
 def Inicio_sesion():
+    root.configure(bg="SystemButtonFace")
     # Crear la imagen de fondo
     image = Image.open("./Logo.png")
     background_image = ImageTk.PhotoImage(image)
@@ -159,8 +156,7 @@ def Inicio_sesion():
     button_login = tk.Button(
         root,
         text="Iniciar sesión",
-        command=lambda: login(root, label_status,
-                              entry_usuario, entry_contraseña),
+        command=lambda: login(root, label_status, entry_usuario, entry_contraseña),
         bg=color_secundario,
         fg="black",
         activebackground=color_cuarto,
@@ -185,8 +181,7 @@ background_image = ImageTk.PhotoImage(image)
 # Crear el widget Label con la imagen de fondo
 background_label = tk.Label(root, image=background_image)
 background_label.place(x=0, y=-150, relwidth=1, relheight=1)
-label_username = tk.Label(root, text="Usuario",
-                          fg="black", font=("Arial", 11, "bold"))
+label_username = tk.Label(root, text="Usuario", fg="black", font=("Arial", 11, "bold"))
 label_username.pack(pady=(250, 0))
 # Entradas de texto
 entry_usuario = tk.Entry(root)
@@ -209,6 +204,7 @@ button_login = tk.Button(
     fg="black",
 )
 button_login.pack(pady=5, ipadx=5, ipady=5)
-root.bind('<Return>', lambda event: login(
-    root, label_status, entry_usuario, entry_contraseña))
+root.bind(
+    "<Return>", lambda event: login(root, label_status, entry_usuario.get(), entry_contraseña.get())
+)
 root.mainloop()
