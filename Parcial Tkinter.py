@@ -3,8 +3,10 @@ from PIL import ImageTk, Image
 
 usuarios = [
     ["admin@email.com", "admin123", "admin", ["", "", True, "", ""]],
-    ["cajero1@email.com", "cajero1", "cajero", ["prueba", "123456789", True, "", ""]],
-    ["cajero2@email.com", "cajero2", "cajero", ["prueba2", "1234567891", True, "", ""]],
+    ["cajero1@email.com", "cajero1", "cajero",
+        ["prueba", "123456789", True, "", ""]],
+    ["cajero2@email.com", "cajero2", "cajero",
+        ["prueba2", "1234567891", True, "", ""]],
     [
         "angel@gmail.com",
         "contra",
@@ -47,7 +49,7 @@ class Admin:
         # Crear una barra de herramientas
         barra = tk.Menu(root)
         root.config(menu=barra)
-        
+
         # Agregar botones a la barra de herramientas
         barra.add_command(label="Opción 1", command=self.opcion1)
         barra.add_command(label="Opción 2", command=self.opcion2)
@@ -157,7 +159,8 @@ def Inicio_sesion():
     button_login = tk.Button(
         root,
         text="Iniciar sesión",
-        command=lambda: login(root, label_status, entry_usuario, entry_contraseña),
+        command=lambda: login(root, label_status,
+                              entry_usuario, entry_contraseña),
         bg=color_secundario,
         fg="black",
         activebackground=color_cuarto,
@@ -168,6 +171,12 @@ def Inicio_sesion():
 
 
 root = tk.Tk()
+# Cargar la imagen del icono
+icon_image = Image.open("./Icono.png")
+icon_photo = ImageTk.PhotoImage(icon_image)
+
+# Establecer la imagen como icono de la ventana
+root.iconphoto(True, icon_photo)
 root.title("Inicio de sesión")
 root.geometry("800x600")
 # Crear la imagen de fondo
@@ -176,7 +185,8 @@ background_image = ImageTk.PhotoImage(image)
 # Crear el widget Label con la imagen de fondo
 background_label = tk.Label(root, image=background_image)
 background_label.place(x=0, y=-150, relwidth=1, relheight=1)
-label_username = tk.Label(root, text="Usuario", fg="black", font=("Arial", 11, "bold"))
+label_username = tk.Label(root, text="Usuario",
+                          fg="black", font=("Arial", 11, "bold"))
 label_username.pack(pady=(250, 0))
 # Entradas de texto
 entry_usuario = tk.Entry(root)
@@ -197,9 +207,8 @@ button_login = tk.Button(
     command=lambda: login(root, label_status, entry_usuario, entry_contraseña),
     bg=color_secundario,
     fg="black",
-    activebackground=color_cuarto,
-    activeforeground="white",
 )
 button_login.pack(pady=5, ipadx=5, ipady=5)
-root.bind('<Return>', lambda event:login(root, label_status, entry_usuario, entry_contraseña))
+root.bind('<Return>', lambda event: login(
+    root, label_status, entry_usuario, entry_contraseña))
 root.mainloop()
