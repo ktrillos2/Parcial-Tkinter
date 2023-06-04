@@ -180,7 +180,6 @@ root.iconphoto(True, icon_photo)
 root.title("Inicio de sesión")
 root.geometry("800x600")
 # Crear la imagen de fondo
-# La imagen es de boquitas
 image = Image.open("./Logo.png")
 background_image = ImageTk.PhotoImage(image)
 # Crear el widget Label con la imagen de fondo
