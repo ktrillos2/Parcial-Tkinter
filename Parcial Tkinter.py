@@ -208,6 +208,3 @@ root.bind(
     "<Return>", lambda event: login(root, label_status, entry_usuario.get(), entry_contraseña.get())
 )
 root.mainloop()
-
-
-#Toy que me mato
