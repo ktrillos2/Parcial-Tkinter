@@ -1,5 +1,8 @@
 import tkinter as tk
-from PIL import ImageTk, Image
+import re
+from tkinter import messagebox
+from PIL import Image, ImageTk
+
 
 usuarios = [
     ["admin@email.com", "admin123", "admin", ["", "", True, "", ""]],
@@ -32,58 +35,239 @@ contraseña = ""
 
 
 class Admin:
-    def __init__(self):
+    def __init__(self, root):
+        self.root = root
         pass
 
-    def volver(self, root):
-        for widget in root.winfo_children():
-            widget.destroy()
-        Inicio_sesion()
+    def volver(self):
+        self.root.destroy()  # Destruir la ventana actual
+        main = Inicio()  # Crear una nueva instancia de la clase Inicio
+        main.root.mainloop()
 
-    def Ventana_Principal(self, root):
-        root.configure(bg=color_terciario)
-        root.title("Barra de Herramientas")
+    def Ventana_Principal(self):
+        self.root.configure(bg=color_terciario)
+        self.root.title("Barra de Herramientas")
 
         # Crear una barra de herramientas
-        barra = tk.Menu(root)
-        root.config(menu=barra)
+        barra = tk.Menu(self.root)
+        self.root.config(menu=barra)
 
         # Agregar botones a la barra de herramientas
-        barra.add_command(label="Opción 1", command=self.opcion1)
+        cajero_menu = tk.Menu(barra, tearoff=0)
+        cajero_menu.add_command(label="Ver Cajeros", command=self.Cajeros)
+        cajero_menu.add_command(label="Agregar Cajero", command=self.AgregarCajero)
+
+        barra.add_cascade(label="Cajero", menu=cajero_menu)
         barra.add_command(label="Opción 2", command=self.opcion2)
         barra.add_command(label="Opción 3", command=self.opcion3)
         barra.add_command(label="Opción 4", command=self.opcion4)
 
         # Crear un botón de regresar
-        image = Image.open("./BotonVolver.png")
+        image = Image.open("BotonVolver.png")  # Ruta de la imagen corregida
         nuevo_tamaño = (40, 40)
         imagen_nueva = image.resize(nuevo_tamaño)
         background_image = ImageTk.PhotoImage(imagen_nueva)
         button_regresar = tk.Button(
-            root,
-            text="Volver",
+            self.root,
             image=background_image,
-            command=lambda: self.volver(root),
+            command=lambda: self.volver(),
+            bg=color_terciario,
         )
+        button_regresar.image = background_image  # Mantener una referencia a la imagen
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
 
-        # Etiqueta para mostrar la opción seleccionada
-        self.label = tk.Label(root, text="Seleccione una opción",bg=color_terciario)
-        self.label.pack(padx=10, pady=10)
+        self.Cajeros()
 
-        root.mainloop()
+    def Cajeros(self):
+        # Destruir el formulario de agregar cajero si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
 
-    def opcion1(self):
-        self.label.config(text="Has seleccionado la opción 1.")
+        # Filtrar los usuarios que tengan el rol "cajero"
+        cajeros = [cajero for cajero in usuarios if cajero[2] == "cajero"]
+
+        # Crear la tabla de cajeros
+        table_frame = tk.Frame(self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        table_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título de la tabla
+        titulo = tk.Label(
+            table_frame, text="Cajeros", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=4, pady=10)
+
+        # Encabezados de las columnas
+        correo_label = tk.Label(
+            table_frame, text="Correo", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        correo_label.grid(row=1, column=0, padx=5, pady=5)
+
+        eliminar_label = tk.Label(
+            table_frame, text="Eliminar", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        eliminar_label.grid(row=1, column=2, padx=5, pady=5)
+
+        editar_label = tk.Label(
+            table_frame, text="Editar", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        editar_label.grid(row=1, column=3, padx=5, pady=5)
+
+        # Mostrar datos de los cajeros en la tabla
+        for i, cajero in enumerate(cajeros, start=2):
+            correo = cajero[0]
+
+            correo_label = tk.Label(table_frame, text=correo, bg=color_terciario)
+            correo_label.grid(row=i, column=0, padx=(20, 5), pady=5)
+
+            eliminar_button = tk.Button(
+                table_frame,
+                text="Eliminar",
+                command=lambda c=cajero: self.eliminar_cajero(c),
+                bg="red",
+            )
+            eliminar_button.grid(row=i, column=2, padx=5, pady=5)
+
+            editar_button = tk.Button(
+                table_frame,
+                text="Editar",
+                command=lambda c=cajero: self.editar_cajero(c),
+                bg="blue",
+            )
+            editar_button.grid(row=i, column=3, padx=5, pady=5)
+
+
+    def AgregarCajero(self):
+        # Destruir la tabla de cajeros si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear el formulario de agregar cajero
+        form_frame = tk.Frame(self.root, bg=color_terciario, bd=0)
+        form_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título del formulario
+        titulo = tk.Label(
+            form_frame,
+            text="Agregar Cajero",
+            font=("Arial", 14, "bold"),
+            bg=color_terciario,
+        )
+        titulo.grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Campos del formulario
+        nombre_label = tk.Label(
+            form_frame, text="Nombre:", font=("Arial", 12), bg=color_terciario
+        )
+        nombre_label.grid(row=1, column=0, padx=5, pady=5)
+        nombre_entry = tk.Entry(form_frame, font=("Arial", 12))
+        nombre_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        numero_doc_label = tk.Label(
+            form_frame,
+            text="Número de Documento:",
+            font=("Arial", 12),
+            bg=color_terciario,
+        )
+        numero_doc_label.grid(row=2, column=0, padx=5, pady=5)
+        numero_doc_entry = tk.Entry(form_frame, font=("Arial", 12))
+        numero_doc_entry.grid(row=2, column=1, padx=5, pady=5)
+
+        correo_label = tk.Label(
+            form_frame, text="Correo:", font=("Arial", 12), bg=color_terciario
+        )
+        correo_label.grid(row=3, column=0, padx=5, pady=5)
+        correo_entry = tk.Entry(form_frame, font=("Arial", 12))
+        correo_entry.grid(row=3, column=1, padx=5, pady=5)
+
+        contrasena_label = tk.Label(
+            form_frame, text="Contraseña:", font=("Arial", 12), bg=color_terciario
+        )
+        contrasena_label.grid(row=4, column=0, padx=5, pady=5)
+        contrasena_entry = tk.Entry(form_frame, font=("Arial", 12), show="*")
+        contrasena_entry.grid(row=4, column=1, padx=5, pady=5)
+
+        # Botón de añadir nuevo cajero
+        nuevo_cajero_button = tk.Button(
+            form_frame,
+            text="Añadir Nuevo Cajero",
+            command=lambda: self.nuevo_cajero(
+                nombre_entry.get(),
+                correo_entry.get(),
+                contrasena_entry.get(),
+                numero_doc_entry.get(),
+            ),
+            bg=color_principal,
+            fg="white",
+        )
+        nuevo_cajero_button.grid(
+            row=5, column=0, columnspan=2, padx=5, pady=10, ipadx=10
+        )
+
+    def nuevo_cajero(self, nombre, correo, contrasena, numero_documento):
+
+        # Verificar campos vacíos
+        if nombre == "" or numero_documento == "" or correo == "" or contrasena == "":
+            messagebox.showerror("Error", "Por favor, complete todos los campos.")
+            return
+
+        # Verificar correo válido
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            messagebox.showerror("Error", "El correo ingresado es inválido.")
+            return
+
+        # Verificar documento válido
+        if not numero_documento.isdigit() or len(numero_documento) < 9 or len(numero_documento) > 10:
+            messagebox.showerror("Error", "El número de documento ingresado es inválido.")
+            return
+        
+        #Verificar duplciados de documento y correo
+        for usuario in usuarios:
+            if usuario[0] == correo:
+                messagebox.showerror("Error", "El correo ya está en uso.")
+                return
+            if usuario[3][1] == numero_documento:
+                messagebox.showerror("Error", "El número de documento ya existe.")
+                return
+
+        nuevo_cajero = [correo, contrasena, "cajero", [nombre, "", True, numero_documento, ""]]
+        usuarios.append(nuevo_cajero)
+        print("Nuevo cajero agregado:", nuevo_cajero)
 
     def opcion2(self):
-        self.label.config(text="Has seleccionado la opción 2.")
+        self.label.config(text="Has seleccionado la opción 2")
 
     def opcion3(self):
-        self.label.config(text="Has seleccionado la opción 3.")
+        self.label.config(text="Has seleccionado la opción 3")
 
     def opcion4(self):
-        self.label.config(text="Has seleccionado la opción 4.")
+        self.label.config(text="Has seleccionado la opción 4")
+
+    def es_correo_valido(self,correo):
+        # Expresión regular para validar el correo electrónico
+        patron_correo = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        return re.match(patron_correo, correo)
+
+    def es_documento_valido(self,documento):
+        # Expresión regular para validar el número de documento
+        patron_documento = r"^\d{9,10}$"
+        return re.match(patron_documento, documento)
+    
+    def eliminar_cajero(self, cajero):
+        usuarios.remove(cajero)  # Eliminar el cajero del arreglo de usuarios
+
+        # Destruir la tabla de cajeros si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Volver a crear la tabla de cajeros sin el cajero eliminado
+        self.Cajeros()
+
+    def editar_cajero(self, cajero):
+        # Lógica para editar un cajero del arreglo de usuarios
+        print("Editar cajero:", cajero)
 
 
 class Cajero:
@@ -96,115 +280,126 @@ class Usuario:
         pass
 
 
-def login(root, label_status, usuario, contraseña):
+class Inicio:
+    def __init__(self) -> None:
+        self.root = tk.Tk()
+        self.Inicio_sesion()
+        pass
 
-    encontrado = False
-    habilitado = False
-    for i in usuarios:
-        for j in range(len(i[3])):
-            if i[0] == usuario and i[1] == contraseña and i[3][2]:
-                habilitado = True
-    for i in usuarios:
-        if i[0] == usuario and i[1] == contraseña and habilitado == True:
-            encontrado = True
-            if i[2] == "admin":
-                for widget in root.winfo_children():
-                    widget.destroy()
-                Admin().Ventana_Principal(root)
-                break
-            if i[2] == "cajero":
-                label_status.config(
-                    text="Inicio de sesión exitoso", fg="green", bg=color_terciario
-                )
-                break
-            if i[2] == "usuario":
-                label_status.config(
-                    text="Inicio de sesión exitoso", fg="green", bg=color_terciario
-                )
-                break
-    if not encontrado:
-        label_status.config(
-            text="Usuario no existe, ¿desea registrarse?",
-            fg="red",
+    def login(self, root, label_status, usuario, contraseña):
+        encontrado = False
+        habilitado = False
+        for i in usuarios:
+            for j in range(len(i[3])):
+                if i[0] == usuario and i[1] == contraseña and i[3][2]:
+                    habilitado = True
+        for i in usuarios:
+            if i[0] == usuario and i[1] == contraseña and habilitado == True:
+                encontrado = True
+                if i[2] == "admin":
+                    for widget in root.winfo_children():
+                        widget.destroy()
+                    Admin(root).Ventana_Principal()
+                    break
+                if i[2] == "cajero":
+                    label_status.config(
+                        text="Inicio de sesión exitoso", fg="green", bg=color_terciario
+                    )
+                    break
+                if i[2] == "usuario":
+                    label_status.config(
+                        text="Inicio de sesión exitoso", fg="green", bg=color_terciario
+                    )
+                    break
+        if not encontrado:
+            label_status.config(
+                text="Usuario no existe, ¿desea registrarse?",
+                fg="red",
+            )
+
+            button_frame = tk.Frame(root)
+            button_frame.pack()
+
+            button_si = tk.Button(
+                button_frame,
+                text="Si",
+                bg=color_secundario,
+                fg="black",
+            )
+            button_si.pack(side="left", padx=5, ipadx=10)
+
+            button_no = tk.Button(
+                button_frame,
+                text="No",
+                command=lambda: self.Opcion_no(),
+                bg=color_secundario,
+                fg="black",
+            )
+            button_no.pack(side="left", padx=5, ipadx=8)
+
+            self.button_login.destroy()
+
+    def Opcion_no(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.Inicio_sesion()
+
+    def Inicio_sesion(self):
+        self.root.configure(bg="SystemButtonFace")
+        # Cargar la imagen del icono
+        # Ruta de la imagen del ícono
+        icon_photo = tk.PhotoImage(file="Icono.png")
+
+        # Establecer la imagen como icono de la ventana
+        self.root.iconphoto(True, icon_photo)
+        self.root.title("Inicio de sesión")
+        self.root.geometry("800x600")
+        # Crear la imagen de fondo
+        self.image = Image.open("./Logo.png")
+        self.background_image = ImageTk.PhotoImage(self.image)
+        # Crear el widget Label con la imagen de fondo
+        self.background_label = tk.Label(self.root, image=self.background_image)
+        self.background_label.place(x=0, y=-150, relwidth=1, relheight=1)
+        self.label_username = tk.Label(
+            self.root, text="Usuario", fg="black", font=("Arial", 11, "bold")
+        )
+        self.label_username.pack(pady=(250, 0))
+        # Entradas de texto
+        self.entry_usuario = tk.Entry(self.root)
+        self.entry_usuario.pack(pady=5)
+        self.entry_usuario.focus()
+        self.label_password = tk.Label(
+            self.root, text="Contraseña", fg="black", font=("Arial", 11, "bold")
+        )
+        self.label_password.pack()
+        self.entry_contraseña = tk.Entry(self.root, show="*")
+        self.entry_contraseña.pack(pady=5)
+        self.label_status = tk.Label(self.root, text="", fg="black")
+        self.label_status.pack(pady=5)
+        # Botón
+        self.button_login = tk.Button(
+            self.root,
+            text="Iniciar sesión",
+            command=lambda: self.login(
+                self.root,
+                self.label_status,
+                self.entry_usuario.get(),
+                self.entry_contraseña.get(),
+            ),
+            bg=color_secundario,
+            fg="black",
+        )
+        self.button_login.pack(ipadx=5, ipady=5)
+        self.root.bind(
+            "<Return>",
+            lambda event: self.login(
+                self.root,
+                self.label_status,
+                self.entry_usuario.get(),
+                self.entry_contraseña.get(),
+            ),
         )
 
 
-def Inicio_sesion():
-    root.configure(bg="SystemButtonFace")
-    # Crear la imagen de fondo
-    image = Image.open("./Logo.png")
-    background_image = ImageTk.PhotoImage(image)
-    # Crear el widget Label con la imagen de fondo
-    background_label = tk.Label(root, image=background_image)
-    background_label.place(x=0, y=-150, relwidth=1, relheight=1)
-    label_username = tk.Label(
-        root, text="Usuario", fg="black", font=("Arial", 11, "bold")
-    )
-    label_username.pack(pady=(250, 0))
-    # Entradas de texto
-    entry_usuario = tk.Entry(root)
-    entry_usuario.pack()
-    label_password = tk.Label(
-        root, text="Contraseña", fg="black", font=("Arial", 11, "bold")
-    )
-    label_password.pack()
-    entry_contraseña = tk.Entry(root, show="*")
-    entry_contraseña.pack()
-    label_status = tk.Label(root, text="", fg="black")
-    label_status.pack(pady=5)
-    # Botón
-    button_login = tk.Button(
-        root,
-        text="Iniciar sesión",
-        command=lambda: login(root, label_status, entry_usuario, entry_contraseña),
-        bg=color_secundario,
-        fg="black",
-        activebackground=color_cuarto,
-        activeforeground="white",
-    )
-    button_login.pack(pady=5, ipadx=5, ipady=5)
-    root.mainloop()
-
-
-root = tk.Tk()
-# Cargar la imagen del icono
-icon_image = Image.open("./Icono.png")
-icon_photo = ImageTk.PhotoImage(icon_image)
-
-# Establecer la imagen como icono de la ventana
-root.iconphoto(True, icon_photo)
-root.title("Inicio de sesión")
-root.geometry("800x600")
-# Crear la imagen de fondo
-image = Image.open("./Logo.png")
-background_image = ImageTk.PhotoImage(image)
-# Crear el widget Label con la imagen de fondo
-background_label = tk.Label(root, image=background_image)
-background_label.place(x=0, y=-150, relwidth=1, relheight=1)
-label_username = tk.Label(root, text="Usuario", fg="black", font=("Arial", 11, "bold"))
-label_username.pack(pady=(250, 0))
-# Entradas de texto
-entry_usuario = tk.Entry(root)
-entry_usuario.focus()
-entry_usuario.pack()
-label_password = tk.Label(
-    root, text="Contraseña", fg="black", font=("Arial", 11, "bold")
-)
-label_password.pack()
-entry_contraseña = tk.Entry(root, show="*")
-entry_contraseña.pack()
-label_status = tk.Label(root, text="", fg="black")
-label_status.pack(pady=5)
-# Botón
-button_login = tk.Button(
-    root,
-    text="Iniciar sesión",
-    command=lambda: login(root, label_status, entry_usuario.get(), entry_contraseña.get()),
-    bg=color_secundario,
-    fg="black",
-)
-button_login.pack(pady=5, ipadx=5, ipady=5)
-root.bind(
-    "<Return>", lambda event: login(root, label_status, entry_usuario.get(), entry_contraseña.get())
-)
-root.mainloop()
+main = Inicio()
+main.root.mainloop()
