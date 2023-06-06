@@ -792,9 +792,14 @@ class Cajero:
 
 
 class Usuario:
-    def __init__(self, root) -> None:
-        self.root=root
-        pass
+    def __init__(self, root):
+        self.root = root
+
+    def volver_inicio_sesion(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.mostrar_ventana_inicio_sesion()  
+ 
     def Ventana_Usuario(self):
         self.root.configure(bg=color_terciario)
         self.root.title("Barra de Herramientas")
@@ -805,37 +810,37 @@ class Usuario:
 
         # Agregar botones a la barra de herramientas
         cajero_menu = tk.Menu(barra, tearoff=0)
-        compra= tk.Menu(barra, tearoff=1)
-        cajero_menu.add_command(label="Modificar Usuario",)
-        compra.addcomand(label="Compra en Linea")
-        compra.addcomand(label="Pagar en caja")
-        compra.addcomand(label="Todo en caja")
+        compra = tk.Menu(barra, tearoff=1)
+        cajero_menu.add_command(label="Modificar Usuario")
+        compra.add_command(label="Compra en Linea")
+        compra.add_command(label="Pagar en caja")
+        compra.add_command(label="Todo en caja")
 
         barra.add_cascade(label="Usuario", menu=cajero_menu)
         barra.add_cascade(label="Comprar", menu=compra)
-        
 
         # Crear un botón de regresar
-        image = Image.open("BotonVolver.png")  # Ruta de la imagen corregida
+        image = Image.open("BotonVolver.png")
         nuevo_tamaño = (40, 40)
         imagen_nueva = image.resize(nuevo_tamaño)
         background_image = ImageTk.PhotoImage(imagen_nueva)
         button_regresar = tk.Button(
             self.root,
             image=background_image,
-            command=lambda: self.volver(),
-            bg=color_terciario,
+            command=lambda: self.volver_inicio_sesion(),
+            bg=color_terciario
         )
-        button_regresar.image = background_image  # Mantener una referencia a la imagen
+        button_regresar.image = background_image
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
-
-      
+                
     
+
 
 
 class Inicio:
     def __init__(self) -> None:
         self.root = tk.Tk()
+        self.usuario=Usuario(self.root)
         self.Inicio_sesion()
         pass
 
@@ -865,7 +870,7 @@ class Inicio:
                     )
                     for widget in root.winfo_children():
                         widget.destroy()
-                    Usuario(root).Ventana_Usuario()
+                    self.usuario.Ventana_Usuario()
                     break
         if not encontrado:
             label_status.config(
