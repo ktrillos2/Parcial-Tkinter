@@ -2,12 +2,14 @@ import tkinter as tk
 import re
 from tkinter import messagebox
 from PIL import Image, ImageTk
-
+import datetime
 
 usuarios = [
     ["admin@email.com", "admin123", "admin", ["", "", True, "", ""]],
-    ["cajero1@email.com", "cajero1", "cajero", ["prueba", "123456789", True, "", ""]],
-    ["cajero2@email.com", "cajero2", "cajero", ["prueba2", "1234567891", True, "", ""]],
+    ["cajero1@email.com", "cajero1", "cajero",
+        ["prueba", "123456789", True, "", ""]],
+    ["cajero2@email.com", "cajero2", "cajero",
+        ["prueba2", "1234567891", True, "", ""]],
     [
         "angel@gmail.com",
         "contra",
@@ -21,6 +23,195 @@ usuarios = [
         "usuario",
         ["angel", "1234567893", True, "3222244572", "Mz A lote 1"],
         0,
+    ],
+]
+
+facturas = [
+    [
+        1,
+        "keiner@gmail.com",
+        "21/03/2023",
+        {
+            "tipo": "Ensalada de frutas",
+            "tamaño": "para compartir sin helado",
+            "sabor": ["Ensalada de frutas sin helado"],
+            "precio": 10200,
+        },"caja",
+        {"Total": 10200},
+    ],
+    [
+        2,
+        "Andres",
+        "26/03/2023",
+        {
+            "tipo": "Fresas",
+            "tamaño": "Fresas con helado",
+            "sabor": ["vainilla chips"],
+            "precio": 8400,
+        },"caja",
+        {"Total": 8400},
+    ],
+    [
+        3,
+        "Felipe",
+        "21/03/2023",
+        {
+            "tipo": "Granizados",
+            "tamaño": "Granizado 16 onz",
+            "sabor": ["fresa"],
+            "precio": 8400,
+        },"online",
+        {"Total": 8400},
+    ],
+    [
+        4,
+        "Felipe",
+        "12/01/2023",
+        {
+            "tipo": "Banana split",
+            "tamaño": "Banana split",
+            "sabor": ["fresa", "ron con pasas"],
+            "precio": 13200,
+        },"onlinecaja",
+        {"Total": 13200},
+    ],
+    [
+        5,
+        "Felipe",
+        "10/04/2023",
+        {
+            "tipo": "Banana split",
+            "tamaño": "Banana split",
+            "sabor": ["fresa", "ron con pasas"],
+            "precio": 13200,
+        },"caja",
+        {"Total": 13200},
+    ],
+    [
+        6,
+        "Andres",
+        "12/08/2019",
+        {
+            "tipo": "Ensalada de frutas",
+            "tamaño": "para compartir con helado",
+            "sabor": ["vainilla chips", "tropical de agua"],
+            "precio": 14500,
+        },"online",
+        {"Total": 14500},
+    ],
+    [
+        7,
+        "Andres",
+        "12/08/2019",
+        {
+            "tipo": "Ensalada de frutas",
+            "tamaño": "para compartir con helado",
+            "sabor": ["vainilla chips", "tropical de agua"],
+            "precio": 14500,
+        },"caja",
+        {"Total": 14500},
+    ],
+    [
+        8,
+        "Tomas",
+        "12/03/2021",
+        {
+            "tipo": "Vasos",
+            "tamaño": "Doble",
+            "sabor": ["vainilla chips", "cereza"],
+            "precio": 8400,
+        },
+        {
+            "tipo": "Litro de helado",
+            "tamaño": "Litro de helado",
+            "sabor": ["vainilla chips"],
+            "precio": 27000,
+        },"caja",
+        {"Total": 35400},
+    ],
+    [
+        9,
+        "Andres",
+        "19/04/2022",
+        {
+            "tipo": "Copas infantiles",
+            "tamaño": "Fiesta",
+            "sabor": ["maracuya en leche", "nata"],
+            "precio": 8800,
+        },"online",
+        {"Total": 8800},
+    ],
+    [
+        10,
+        "Felipe",
+        "18/02/2023",
+        {
+            "tipo": " Malteadas",
+            "tamaño": "Malteada 12 onz",
+            "sabor": ["maracuya en leche"],
+            "precio": 6400,
+        },"onlinecaja",
+        {"Total": 6400},
+    ],
+    [
+        11,
+        "Tomas",
+        "25/03/2023",
+        {
+            "tipo": "Banana split",
+            "tamaño": "Banana split",
+            "sabor": ["frutos rojos", "chicle"],
+            "precio": 13200,
+        },"caja",
+        {"Total": 13200},
+    ],
+    [
+        12,
+        "Tomas",
+        "01/01/2021",
+        {
+            "tipo": "Copas infantiles",
+            "tamaño": "piñata",
+            "sabor": ["crocante"],
+            "precio": 10800,
+        },"online",
+        {"Total": 10800},
+    ],
+    [
+        13,
+        "Tomas",
+        "06/04/2022",
+        {
+            "tipo": "Granizados",
+            "tamaño": "Granizado 16 onz",
+            "sabor": ["fresa"],
+            "precio": 8400,
+        },"caja",
+        {"Total": 8400},
+    ],
+    [
+        14,
+        "Felipe",
+        "30/04/2022",
+        {
+            "tipo": "Ensalada de frutas",
+            "tamaño": "para compartir con helado",
+            "sabor": ["tropical de agua", "maracuya en agua"],
+            "precio": 14500,
+        },"online",
+        {"Total": 14500},
+    ],
+    [
+        15,
+        "Andres",
+        "12/02/2023",
+        {
+            "tipo": "Conos",
+            "tamaño": "Doble",
+            "sabor": ["maracuya en agua", "tropical de agua"],
+            "precio": 8400,
+        },"onlinecaja",
+        {"Total": 8400},
     ],
 ]
 
@@ -55,11 +246,23 @@ class Admin:
         # Agregar botones a la barra de herramientas
         cajero_menu = tk.Menu(barra, tearoff=0)
         cajero_menu.add_command(label="Ver Cajeros", command=self.Cajeros)
-        cajero_menu.add_command(label="Agregar Cajero", command=self.AgregarCajero)
+        cajero_menu.add_command(label="Agregar Cajero",
+                                command=self.AgregarCajero)
+        productos_menu = tk.Menu(barra, tearoff=0)
+        productos_menu.add_command(label="Ver Productos", command=self.Productos)
+        productos_menu.add_command(label="Modificar Productos", command=self.ModificarProductos)
+        productos_menu.add_command(label="Agregar Productos", command=self.AgregarProductos)
+
+        # Agregar opción de "Ver Facturas"
+        facturas_menu = tk.Menu(barra, tearoff=0)
+        facturas_menu.add_command(label="Ver Facturas", command=self.VerFacturas)
+        facturas_menu.add_command(label="Ver Facturas por Fecha", command=self.VerFacturasPorFecha)
+        facturas_menu.add_command(label="Ver Facturas por Cajero", command=self.VerFacturasPorCajero)
+
 
         barra.add_cascade(label="Cajero", menu=cajero_menu)
-        barra.add_command(label="Opción 2", command=self.opcion2)
-        barra.add_command(label="Opción 3", command=self.opcion3)
+        barra.add_cascade(label="Productos", menu=productos_menu)
+        barra.add_cascade(label="Facturas", menu=facturas_menu)
         barra.add_command(label="Opción 4", command=self.opcion4)
 
         # Crear un botón de regresar
@@ -88,37 +291,59 @@ class Admin:
         cajeros = [cajero for cajero in usuarios if cajero[2] == "cajero"]
 
         # Crear la tabla de cajeros
-        table_frame = tk.Frame(self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        table_frame = tk.Frame(
+            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
         table_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
 
         # Título de la tabla
         titulo = tk.Label(
             table_frame, text="Cajeros", font=("Arial", 14, "bold"), bg=color_terciario
         )
-        titulo.grid(row=0, column=0, columnspan=4, pady=10)
+        titulo.grid(row=0, column=0, columnspan=5, pady=10)
 
         # Encabezados de las columnas
+        nombre_label = tk.Label(
+            table_frame, text="Nombre", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        nombre_label.grid(row=1, column=0, padx=(30, 5), pady=5)
+
         correo_label = tk.Label(
             table_frame, text="Correo", font=("Arial", 12, "bold"), bg=color_terciario
         )
-        correo_label.grid(row=1, column=0, padx=5, pady=5)
+        correo_label.grid(row=1, column=1, padx=(20, 5), pady=5)
+
+        documento_label = tk.Label(
+            table_frame, text="Documento", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        documento_label.grid(row=1, column=2, padx=(20, 10), pady=5)
 
         eliminar_label = tk.Label(
             table_frame, text="Eliminar", font=("Arial", 12, "bold"), bg=color_terciario
         )
-        eliminar_label.grid(row=1, column=2, padx=5, pady=5)
+        eliminar_label.grid(row=1, column=3, padx=10, pady=5)
 
         editar_label = tk.Label(
             table_frame, text="Editar", font=("Arial", 12, "bold"), bg=color_terciario
         )
-        editar_label.grid(row=1, column=3, padx=5, pady=5)
+        editar_label.grid(row=1, column=4, padx=10, pady=5)
 
         # Mostrar datos de los cajeros en la tabla
         for i, cajero in enumerate(cajeros, start=2):
+            nombre = cajero[3][0]
             correo = cajero[0]
+            documento = cajero[3][1]
 
-            correo_label = tk.Label(table_frame, text=correo, bg=color_terciario)
-            correo_label.grid(row=i, column=0, padx=(20, 5), pady=5)
+            nombre_label = tk.Label(
+                table_frame, text=nombre, bg=color_terciario)
+            nombre_label.grid(row=i, column=0, padx=(20, 5), pady=5)
+
+            correo_label = tk.Label(
+                table_frame, text=correo, bg=color_terciario)
+            correo_label.grid(row=i, column=1, padx=(20, 5), pady=5)
+
+            documento_label = tk.Label(
+                table_frame, text=documento, bg=color_terciario)
+            documento_label.grid(row=i, column=2, padx=(20, 5), pady=5)
 
             eliminar_button = tk.Button(
                 table_frame,
@@ -126,16 +351,15 @@ class Admin:
                 command=lambda c=cajero: self.eliminar_cajero(c),
                 bg="red",
             )
-            eliminar_button.grid(row=i, column=2, padx=5, pady=5)
+            eliminar_button.grid(row=i, column=3, padx=5, pady=5)
 
             editar_button = tk.Button(
                 table_frame,
                 text="Editar",
                 command=lambda c=cajero: self.editar_cajero(c),
-                bg="blue",
+                bg="yellow",
             )
-            editar_button.grid(row=i, column=3, padx=5, pady=5)
-
+            editar_button.grid(row=i, column=4, padx=5, pady=5)
 
     def AgregarCajero(self):
         # Destruir la tabla de cajeros si ya existe
@@ -209,7 +433,8 @@ class Admin:
 
         # Verificar campos vacíos
         if nombre == "" or numero_documento == "" or correo == "" or contrasena == "":
-            messagebox.showerror("Error", "Por favor, complete todos los campos.")
+            messagebox.showerror(
+                "Error", "Por favor, complete todos los campos.")
             return
 
         # Verificar correo válido
@@ -219,41 +444,35 @@ class Admin:
 
         # Verificar documento válido
         if not numero_documento.isdigit() or len(numero_documento) < 9 or len(numero_documento) > 10:
-            messagebox.showerror("Error", "El número de documento ingresado es inválido.")
+            messagebox.showerror(
+                "Error", "El número de documento ingresado es inválido.")
             return
-        
-        #Verificar duplciados de documento y correo
+
+        # Verificar duplciados de documento y correo
         for usuario in usuarios:
             if usuario[0] == correo:
                 messagebox.showerror("Error", "El correo ya está en uso.")
                 return
             if usuario[3][1] == numero_documento:
-                messagebox.showerror("Error", "El número de documento ya existe.")
+                messagebox.showerror(
+                    "Error", "El número de documento ya existe.")
                 return
 
-        nuevo_cajero = [correo, contrasena, "cajero", [nombre, "", True, numero_documento, ""]]
+        nuevo_cajero = [correo, contrasena, "cajero",
+                        [nombre, numero_documento, True, "", ""]]
         usuarios.append(nuevo_cajero)
         print("Nuevo cajero agregado:", nuevo_cajero)
 
-    def opcion2(self):
-        self.label.config(text="Has seleccionado la opción 2")
-
-    def opcion3(self):
-        self.label.config(text="Has seleccionado la opción 3")
-
-    def opcion4(self):
-        self.label.config(text="Has seleccionado la opción 4")
-
-    def es_correo_valido(self,correo):
+    def es_correo_valido(self, correo):
         # Expresión regular para validar el correo electrónico
         patron_correo = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
         return re.match(patron_correo, correo)
 
-    def es_documento_valido(self,documento):
+    def es_documento_valido(self, documento):
         # Expresión regular para validar el número de documento
         patron_documento = r"^\d{9,10}$"
         return re.match(patron_documento, documento)
-    
+
     def eliminar_cajero(self, cajero):
         usuarios.remove(cajero)  # Eliminar el cajero del arreglo de usuarios
 
@@ -266,8 +485,305 @@ class Admin:
         self.Cajeros()
 
     def editar_cajero(self, cajero):
-        # Lógica para editar un cajero del arreglo de usuarios
-        print("Editar cajero:", cajero)
+        # Destruir la tabla de cajeros si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear el formulario de editar cajero
+        form_frame = tk.Frame(self.root, bg=color_terciario, bd=0)
+        form_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título del formulario
+        titulo = tk.Label(
+            form_frame,
+            text="Editar Cajero",
+            font=("Arial", 14, "bold"),
+            bg=color_terciario,
+        )
+        titulo.grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Obtener los datos del cajero seleccionado
+        correo = cajero[0]
+        contrasena = cajero[1]
+        nombre = cajero[3][0]
+        documento = cajero[3][1]
+
+        # Campos del formulario
+        nombre_label = tk.Label(
+            form_frame, text="Nombre:", font=("Arial", 12), bg=color_terciario
+        )
+        nombre_label.grid(row=1, column=0, padx=5, pady=5)
+        nombre_entry = tk.Entry(form_frame, font=("Arial", 12))
+        # Rellenar el campo con el nombre del cajero
+        nombre_entry.insert(tk.END, nombre)
+        nombre_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        numero_doc_label = tk.Label(
+            form_frame,
+            text="Número de Documento:",
+            font=("Arial", 12),
+            bg=color_terciario,
+        )
+        numero_doc_label.grid(row=2, column=0, padx=5, pady=5)
+        numero_doc_entry = tk.Entry(form_frame, font=("Arial", 12))
+        # Rellenar el campo con el documento del cajero
+        numero_doc_entry.insert(tk.END, documento)
+        numero_doc_entry.grid(row=2, column=1, padx=5, pady=5)
+
+        correo_label = tk.Label(
+            form_frame, text="Correo:", font=("Arial", 12), bg=color_terciario
+        )
+        correo_label.grid(row=3, column=0, padx=5, pady=5)
+        correo_entry = tk.Entry(form_frame, font=("Arial", 12))
+        # Rellenar el campo con el correo del cajero
+        correo_entry.insert(tk.END, correo)
+        correo_entry.grid(row=3, column=1, padx=5, pady=5)
+
+        contrasena_label = tk.Label(
+            form_frame, text="Contraseña:", font=("Arial", 12), bg=color_terciario
+        )
+        contrasena_label.grid(row=4, column=0, padx=5, pady=5)
+        contrasena_entry = tk.Entry(form_frame, font=("Arial", 12), show="*")
+        # Rellenar el campo con la contraseña del cajero
+        contrasena_entry.insert(tk.END, contrasena)
+        contrasena_entry.grid(row=4, column=1, padx=5, pady=5)
+
+        # Botón de actualizar cajero
+        actualizar_cajero_button = tk.Button(
+            form_frame,
+            text="Actualizar Cajero",
+            font=("Arial", 12, "bold"),
+            bg="green",
+            command=lambda: self.actualizar_cajero(
+                cajero, nombre_entry.get(), numero_doc_entry.get(
+                ), correo_entry.get(), contrasena_entry.get()
+            ),
+        )
+        actualizar_cajero_button.grid(row=5, column=0, columnspan=2, pady=10)
+
+    def actualizar_cajero(self, cajero, nombre, correo, contrasena, numero_documento):
+        # Verificar campos vacíos
+        if nombre == "" or numero_documento == "" or correo == "" or contrasena == "":
+            messagebox.showerror(
+                "Error", "Por favor, complete todos los campos.")
+            return
+
+        # Verificar correo válido
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            messagebox.showerror("Error", "El correo ingresado es inválido.")
+            return
+
+        # Verificar documento válido
+        if not numero_documento.isdigit() or len(numero_documento) < 9 or len(numero_documento) > 10:
+            messagebox.showerror(
+                "Error", "El número de documento ingresado es inválido.")
+            return
+
+        # Verificar duplicados de documento y correo
+        for usuario in usuarios:
+            if usuario != cajero:
+                if usuario[0] == correo:
+                    messagebox.showerror("Error", "El correo ya está en uso.")
+                    return
+                if usuario[3][1] == numero_documento:
+                    messagebox.showerror(
+                        "Error", "El número de documento ya existe.")
+                    return
+
+        # Actualizar los datos del cajero
+        cajero[0] = correo
+        cajero[1] = contrasena
+        cajero[3][0] = nombre
+        cajero[3][3] = numero_documento
+
+        # Mostrar mensaje de éxito
+        messagebox.showinfo("Éxito", "Cajero actualizado correctamente.")
+
+        # Destruir el formulario de editar cajero y recrear la tabla de cajeros
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+        self.Cajeros()
+        
+    def Productos(self):
+        # Destruir el formulario de agregar producto si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear la tabla de productos
+        table_frame = tk.Frame(
+            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        table_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título de la tabla
+        titulo = tk.Label(
+            table_frame, text="Productos", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=5, pady=10)
+
+        # Encabezados de las columnas
+        # ...
+
+        # Mostrar datos de los productos en la tabla
+        # ...
+        
+    def ModificarProductos(self):
+        # Destruir el formulario de agregar producto si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear el formulario para modificar productos
+        form_frame = tk.Frame(
+            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        form_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título del formulario
+        titulo = tk.Label(
+            form_frame, text="Modificar Productos", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Campos de entrada para modificar productos
+        # ...
+
+    def AgregarProductos(self):
+        # Destruir el formulario de agregar producto si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear el formulario para agregar productos
+        form_frame = tk.Frame(
+            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        form_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título del formulario
+        titulo = tk.Label(
+            form_frame, text="Agregar Productos", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Campos de entrada para agregar productos
+        # ...
+
+    def VerFacturas(self):
+        # Destruir el formulario de agregar cajero si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear la tabla de facturas
+        table_frame = tk.Frame(
+            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        table_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título de la tabla
+        titulo = tk.Label(
+            table_frame, text="Facturas", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=5, pady=10)
+
+        # Encabezados de las columnas
+        # ...
+
+        # Mostrar datos de las facturas en la tabla
+        # ...
+
+        # Puedes implementar la lógica para mostrar las facturas en la tabla según tus necesidades
+
+    def VerFacturasPorFecha(self):
+        # Destruir la tabla de cajeros si ya existe
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Frame):
+                widget.destroy()
+
+        # Crear el formulario de búsqueda por fecha
+        form_frame = tk.Frame(self.root, bg=color_terciario, bd=0)
+        form_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título del formulario
+        titulo = tk.Label(
+            form_frame,
+            text="Buscar Facturas por Fecha",
+            font=("Arial", 14, "bold"),
+            bg=color_terciario,
+        )
+        titulo.grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Campo de fecha
+        fecha_label = tk.Label(
+            form_frame, text="Fecha (DD/MM/AAAA):", font=("Arial", 12), bg=color_terciario
+        )
+        fecha_label.grid(row=1, column=0, padx=5, pady=5)
+        fecha_entry = tk.Entry(form_frame, font=("Arial", 12))
+        fecha_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        # Botón de búsqueda
+        buscar_button = tk.Button(
+            form_frame,
+            text="Buscar",
+            command=lambda: self.buscar_facturas_por_fecha(fecha_entry.get()),
+            bg=color_secundario,
+        )
+        buscar_button.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
+
+
+    def buscar_facturas_por_fecha(self, fecha):
+        # Verificar que se haya ingresado una fecha válida
+        if not fecha:
+            messagebox.showerror("Error", "Ingrese una fecha válida.")
+            return
+
+        # Convertir la fecha ingresada a un objeto datetime
+        try:
+            fecha = datetime.datetime.strptime(fecha, "%d/%m/%Y").date()
+        except ValueError:
+            messagebox.showerror("Error", "Fecha ingresada inválida.")
+            return
+
+        # Filtrar las facturas por fecha
+        facturas_filtradas = [
+            factura for factura in facturas if factura[2] == fecha.strftime("%d/%m/%Y")
+        ]
+
+        # Mostrar las facturas filtradas en una tabla
+        # Crear la tabla de facturas
+        table_frame = tk.Frame(
+            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
+        table_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+
+        # Título de la tabla
+        titulo = tk.Label(
+            table_frame, text="Facturas por Fecha", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=5, pady=10)
+
+        # Encabezados de las columnas
+        headers = ["ID", "Cliente", "Fecha", "Detalles", "Tipo Pago", "Total"]
+        for col, header in enumerate(headers):
+            label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), bg=color_terciario)
+            label.grid(row=1, column=col, padx=5, pady=5)
+
+        # Mostrar las facturas en la tabla
+        for row, factura in enumerate(facturas_filtradas, start=2):
+            for col, value in enumerate(factura):
+                label = tk.Label(table_frame, text=value, font=("Arial", 12), bg=color_terciario)
+                label.grid(row=row, column=col, padx=5, pady=5)
+
+
+
+    def VerFacturasPorCajero(self):
+        pass
+
+    def opcion3(self):
+        self.label.config(text="Has seleccionado la opción 3")
+
+    def opcion4(self):
+        self.label.config(text="Has seleccionado la opción 4")
+
 
 
 class Cajero:
@@ -358,7 +874,8 @@ class Inicio:
         self.image = Image.open("./Logo.png")
         self.background_image = ImageTk.PhotoImage(self.image)
         # Crear el widget Label con la imagen de fondo
-        self.background_label = tk.Label(self.root, image=self.background_image)
+        self.background_label = tk.Label(
+            self.root, image=self.background_image)
         self.background_label.place(x=0, y=-150, relwidth=1, relheight=1)
         self.label_username = tk.Label(
             self.root, text="Usuario", fg="black", font=("Arial", 11, "bold")
