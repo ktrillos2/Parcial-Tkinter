@@ -281,7 +281,7 @@ class Admin:
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
 
     def Ventana_Principal(self):
-        self.herramientas()
+        self.herramientas()    
         self.Cajeros()
 
     def Cajeros(self):
@@ -290,7 +290,6 @@ class Admin:
             widget.destroy()
             
         self.herramientas()
-
         # Filtrar los usuarios que tengan el rol "cajero"
         cajeros = [cajero for cajero in usuarios if cajero[2] == "cajero"]
 
@@ -366,11 +365,12 @@ class Admin:
             editar_button.grid(row=i, column=4, padx=5, pady=5)
 
     def AgregarCajero(self):
-        # Destruir el formulario de agregar cajero si ya existe
+        # Destruir la tabla de cajeros si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
         self.herramientas()
+
 
         # Crear el formulario de agregar cajero
         form_frame = tk.Frame(self.root, bg=color_terciario, bd=0)
@@ -490,7 +490,7 @@ class Admin:
         self.Cajeros()
 
     def editar_cajero(self, cajero):
-        # Destruir el formulario de agregar cajero si ya existe
+        # Destruir la tabla de cajeros si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
@@ -613,11 +613,12 @@ class Admin:
         self.Cajeros()
         
     def Productos(self):
-        # Destruir el formulario de agregar cajero si ya existe
+        # Destruir el formulario de agregar producto si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
         self.herramientas()
+
 
         # Crear la tabla de productos
         table_frame = tk.Frame(
@@ -637,12 +638,11 @@ class Admin:
         # ...
         
     def ModificarProductos(self):
-        # Destruir el formulario de agregar cajero si ya existe
+        # Destruir el formulario de agregar producto si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
         self.herramientas()
-
         # Crear el formulario para modificar productos
         form_frame = tk.Frame(
             self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
@@ -658,7 +658,7 @@ class Admin:
         # ...
 
     def AgregarProductos(self):
-        # Destruir el formulario de agregar cajero si ya existe
+        # Destruir el formulario de agregar producto si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
@@ -699,10 +699,6 @@ class Admin:
         # Crear un frame dentro del widget Canvas para contener la tabla
         table_frame = tk.Frame(canvas, bg=color_terciario,highlightbackground="black", highlightthickness=1)
         canvas.create_window((30, 0), window=table_frame, anchor=tk.NW)
-
-        # Agregar la tabla de facturas al frame
-        # ... código para crear y mostrar la tabla de facturas ...
-        # Crear la tabla de facturas
 
         # Título de la tabla
         titulo = tk.Label(
@@ -775,8 +771,13 @@ class Admin:
                 table_frame, text=precio, bg=color_terciario)
             precio_label.grid(row=i, column=6, padx=(20, 10), pady=5)
 
+        # Mostrar datos de las facturas en la tabla
+        # ...
+
+        # Puedes implementar la lógica para mostrar las facturas en la tabla según tus necesidades
+
     def VerFacturasPorFecha(self):
-        # Destruir el formulario de agregar cajero si ya existe
+        # Destruir la tabla de cajeros si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
@@ -811,6 +812,7 @@ class Admin:
             bg=color_secundario,
         )
         buscar_button.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
+
 
     def buscar_facturas_por_fecha(self, fecha):
         # Verificar que se haya ingresado una fecha válida
@@ -854,8 +856,9 @@ class Admin:
                 label = tk.Label(table_frame, text=value, font=("Arial", 12), bg=color_terciario)
                 label.grid(row=row, column=col, padx=5, pady=5)
 
+
+
     def VerFacturasPorCajero(self):
-        # Destruir el formulario de agregar cajero si ya existe
         for widget in self.root.winfo_children():
             widget.destroy()
             
@@ -876,8 +879,8 @@ class Cajero:
 
 
 class Usuario:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, root):
+        self.root = root
 
     def volver_inicio_sesion(self):
         for widget in self.root.winfo_children():
@@ -916,14 +919,12 @@ class Usuario:
         )
         button_regresar.image = background_image
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
-                
-    
-
-
+         
 
 class Inicio:
     def __init__(self) -> None:
         self.root = tk.Tk()
+        self.usuario=Usuario(self.root)
         self.Inicio_sesion()
         pass
 
@@ -951,6 +952,9 @@ class Inicio:
                     label_status.config(
                         text="Inicio de sesión exitoso", fg="green", bg=color_terciario
                     )
+                    for widget in root.winfo_children():
+                        widget.destroy()
+                    self.usuario.Ventana_Usuario()
                     break
         if not encontrado:
             label_status.config(
@@ -966,6 +970,7 @@ class Inicio:
                 text="Si",
                 bg=color_secundario,
                 fg="black",
+                command=self.Registro,
             )
             button_si.pack(side="left", padx=5, ipadx=10)
 
@@ -979,10 +984,15 @@ class Inicio:
             button_no.pack(side="left", padx=5, ipadx=8)
 
             self.button_login.destroy()
+    def Registro(self):
+    # Destruir los botones de registro
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Button):
+                widget.destroy()
 
     # Crear un formulario de registro similar al de crear cajero
         form_frame = tk.Frame(self.root)
-        form_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        form_frame.place(relx=0.5, rely=0.62, anchor=tk.CENTER)
 
         # Título del formulario
         titulo = tk.Label(
