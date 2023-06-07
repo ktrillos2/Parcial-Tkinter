@@ -832,10 +832,7 @@ class Usuario:
         )
         button_regresar.image = background_image
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
-                
-    
-
-
+         
 
 class Inicio:
     def __init__(self) -> None:
@@ -908,7 +905,7 @@ class Inicio:
 
     # Crear un formulario de registro similar al de crear cajero
         form_frame = tk.Frame(self.root)
-        form_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        form_frame.place(relx=0.5, rely=0.62, anchor=tk.CENTER)
 
         # Título del formulario
         titulo = tk.Label(
