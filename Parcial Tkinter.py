@@ -881,7 +881,6 @@ class Cajero:
 class Usuario:
     def __init__(self, root):
         self.root = root
-
     def volver_inicio_sesion(self):
         for widget in self.root.winfo_children():
             widget.destroy()
@@ -914,12 +913,15 @@ class Usuario:
         button_regresar = tk.Button(
             self.root,
             image=background_image,
-            command=lambda: self.volver_inicio_sesion(),
+            command=lambda: self.volver(),
             bg=color_terciario
         )
         button_regresar.image = background_image
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
-         
+    def volver(self):
+        self.root.destroy()  # Destruir la ventana actual
+        main = Inicio()  # Crear una nueva instancia de la clase Inicio
+        main.root.mainloop()     
 
 class Inicio:
     def __init__(self) -> None:
@@ -954,7 +956,7 @@ class Inicio:
                     )
                     for widget in root.winfo_children():
                         widget.destroy()
-                    self.usuario.Ventana_Usuario()
+                    Usuario(root).Ventana_Usuario()
                     break
         if not encontrado:
             label_status.config(
@@ -1104,7 +1106,7 @@ class Inicio:
             messagebox.showerror("Error", "Por favor, complete todos los campos.")
             return
         if not telefono.isdigit() or len(telefono) != 10:
-            messagebox.showerror("Error", "Por favor, marque un número valido.")
+            messagebox.showerror("Error", "Por favor, marque un telefono valido.")
             return
 
         # Verificar correo válido
