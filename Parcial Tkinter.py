@@ -897,7 +897,7 @@ class Usuario:
         # Agregar botones a la barra de herramientas
         cajero_menu = tk.Menu(barra, tearoff=0)
         compra = tk.Menu(barra, tearoff=1)
-        cajero_menu.add_command(label="Modificar Usuario")
+        cajero_menu.add_command(label="Modificar Usuario", command=self.Actualizar)
         compra.add_command(label="Compra en Linea")
         compra.add_command(label="Pagar en caja")
         compra.add_command(label="Todo en caja")
@@ -922,7 +922,132 @@ class Usuario:
         self.root.destroy()  # Destruir la ventana actual
         main = Inicio()  # Crear una nueva instancia de la clase Inicio
         main.root.mainloop()     
+    def Actualizar(self):
+    # Destruir los botones de registro
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Button):
+                widget.destroy()
+        cedula_=1
+        for usuario in usuarios:
+            cedula_=usuarios[3][1]
+    # Crear un formulario de registro similar al de crear cajero
+        form_frame = tk.Frame(self.root)
+        form_frame.place(relx=0.5, rely=0.62, anchor=tk.CENTER)
 
+        # Título del formulario
+        titulo = tk.Label(
+            form_frame, text="Registro", font=("Arial", 14, "bold")
+        )
+        titulo.grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Etiquetas y campos de entrada
+        correo_label = tk.Label(
+            form_frame, text="Correo:", font=("Arial", 12, "bold")
+        )
+        correo_label.grid(row=1, column=0, padx=5, pady=5)
+        correo_entry = tk.Entry(form_frame, font=("Arial", 12))
+        correo_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        contrasena_label = tk.Label(
+            form_frame, text="Contraseña:", font=("Arial", 12, "bold")
+        )
+        contrasena_label.grid(row=2, column=0, padx=5, pady=5)
+        contrasena_entry = tk.Entry(form_frame, show="*", font=("Arial", 12))
+        contrasena_entry.grid(row=2, column=1, padx=5, pady=5)
+
+        nombre_label = tk.Label(
+            form_frame, text="Nombre:", font=("Arial", 12, "bold")
+        )
+        nombre_label.grid(row=3, column=0, padx=5, pady=5)
+        nombre_entry = tk.Entry(form_frame, font=("Arial", 12))
+        nombre_entry.grid(row=3, column=1, padx=5, pady=5)
+
+        telefono_label = tk.Label(
+            form_frame, text="Teléfono:", font=("Arial", 12, "bold")
+        )
+        telefono_label.grid(row=5, column=0, padx=5, pady=5)
+        telefono_entry = tk.Entry(form_frame, font=("Arial", 12))
+        telefono_entry.grid(row=5, column=1, padx=5, pady=5)
+
+        direccion_label = tk.Label(
+            form_frame, text="Dirección:", font=("Arial", 12, "bold")
+        )
+        direccion_label.grid(row=6, column=0, padx=5, pady=5)
+        direccion_entry = tk.Entry(form_frame, font=("Arial", 12))
+        direccion_entry.grid(row=6, column=1, padx=5, pady=5)
+        
+        
+
+        crear_button = tk.Button(
+            form_frame,
+            text="Actualizar",
+            font=("Arial", 12),
+            command=lambda: self.comprobar_usuario(
+                correo_entry.get(),
+                contrasena_entry.get(),
+                nombre_entry.get(),
+                direccion_entry.get(),
+                telefono_entry.get(),
+                cedula_     
+            ),
+        )
+        crear_button.grid(row=7, column=1, padx=5, pady=5)
+
+        # Botón de volver
+        volver_button = tk.Button(
+            form_frame,
+            text="Volver",
+            font=("Arial", 12),
+            command=lambda: self.Opcion_no()
+        )
+        volver_button.grid(row=7, column=0, padx=5, pady=5)
+
+    def comprobar_usuario(self, correo, contrasena, nombre, direccion, telefono, cedula):
+        if not correo or not contrasena or not nombre or not cedula or not telefono or not direccion:
+            messagebox.showwarning("Campos Incompletos", "Por favor complete todos los campos.")
+            return
+
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            messagebox.showwarning("Correo Inválido", "Por favor ingrese un correo válido.")
+            return
+        if nombre == "" or cedula == "" or correo == "" or contrasena == "":
+            messagebox.showerror("Error", "Por favor, complete todos los campos.")
+            return
+        if not telefono.isdigit() or len(telefono) != 10:
+            messagebox.showerror("Error", "Por favor, marque un telefono valido.")
+            return
+
+        # Verificar correo válido
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            messagebox.showerror("Error", "El correo ingresado es inválido.")
+            return
+        
+        # Verificar documento válido
+        if not cedula.isdigit() or len(cedula) < 9 or len(cedula) > 10:
+            messagebox.showerror("Error", "El número de documento ingresado es inválido.")
+            return
+        
+        #Verificar duplciados de documento y correo
+        for usuario in usuarios:
+            if usuario[0] == correo:
+                messagebox.showerror("Error", "El correo ya está en uso.")
+                return
+            if usuario[3][1] == cedula:
+                usuarios.append([correo, contrasena, "usuario", [nombre, cedula, True, telefono, direccion]])
+                messagebox.showinfo("Actualizacion Exitosa", "El usuario ha sido actualizado exitosamente.")
+            if len(usuario) > 3 and usuario[3][3] == telefono:
+                messagebox.showerror("Error", "El telefono ya esta en uso")
+                return
+        
+        
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.Inicio_sesion()
+
+    def Opcion_no(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.Ventana_Usuario()
 class Inicio:
     def __init__(self) -> None:
         self.root = tk.Tk()
