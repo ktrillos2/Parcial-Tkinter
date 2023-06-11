@@ -566,18 +566,6 @@ class Admin:
                 ), correo_entry.get(), contrasena_entry.get()
             ),
         )
-        actualizar_cajero_button.grid(row=5, column=0, columnspan=2, pady=10)
-        volver_button = tk.Button(
-            form_frame,
-            text="Volver",
-            font=("Arial", 12),
-            command=lambda: self.Opcion_no()
-        )
-        volver_button.grid(row=7, column=1, columnspan=2, pady=10) 
-    def Opcion_no(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
-        self.herramientas()
     def actualizar_cajero(self, cajero, nombre, correo, contrasena, numero_documento):
         # Verificar campos vacíos
         if nombre == "" or numero_documento == "" or correo == "" or contrasena == "":
@@ -1030,13 +1018,7 @@ class Usuario:
             ),
         )
         actualizar_usuario_button.grid(row=7, column=0, columnspan=2, pady=10)
-        volver_button = tk.Button(
-            form_frame,
-            text="Volver",
-            font=("Arial", 12),
-            command=lambda usuario=usuario1: self.Opcion_no(usuario)
-        )
-        volver_button.grid(row=7, column=1, columnspan=2, pady=10) 
+ 
     def actualizar_usuario(self, usuario1, nombre, correo, contrasena, numero_documento, telefono, direccion):
         # Verificar campos vacíos
         if nombre == "" or numero_documento == "" or correo == "" or contrasena == "" or telefono == "" or direccion == "":
@@ -1368,7 +1350,14 @@ class Inicio:
                 self.entry_contraseña.get(),
             ),
         )
+        self.root.update_idletasks()
+        width = self.root.winfo_width()
+        height = self.root.winfo_height()
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        self.root.geometry(f"{width}x{height}+{x}+{y}")
 
+        self.root.mainloop()
 
 main = Inicio()
 main.root.mainloop()
