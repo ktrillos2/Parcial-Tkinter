@@ -929,7 +929,7 @@ class Usuario:
         
         # Crear el formulario de editar cajero
         form_frame = tk.Frame(self.root, bg=color_terciario, bd=0)
-        form_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+        form_frame.pack(side=tk.TOP, padx=10, pady=(100, 10), ipadx=10, ipady=10, anchor="center")
 
         # Título del formulario
         titulo = tk.Label(
@@ -1212,7 +1212,7 @@ class Inicio:
             
             ),
         )
-        crear_button.grid(row=7, column=1, padx=5, pady=5)
+        crear_button.grid(row=7, column=2, padx=5, pady=5)
 
         # Botón de volver
         volver_button = tk.Button(
@@ -1298,12 +1298,12 @@ class Inicio:
         self.root.configure(bg="SystemButtonFace")
         # Cargar la imagen del icono
         # Ruta de la imagen del ícono
-        icon_photo = tk.PhotoImage(file="Icono.png")
-
-        # Establecer la imagen como icono de la ventana
-        self.root.iconphoto(True, icon_photo)
         self.root.title("Inicio de sesión")
         self.root.geometry("800x600")
+        icon_photo = tk.PhotoImage(file="Icono.png")
+        # Establecer la imagen como icono de la ventana
+
+        self.root.iconphoto(False, icon_photo)
         # Crear la imagen de fondo
         self.image = Image.open("./Logo.png")
         self.background_image = ImageTk.PhotoImage(self.image)
