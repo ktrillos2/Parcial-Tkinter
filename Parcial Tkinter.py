@@ -1108,7 +1108,7 @@ class Inicio:
                     for widget in root.winfo_children():
                         widget.destroy()
                     self.usuario.Ventana_Usuario(i)
-                    
+                    self.usuario.editar_usuario(i)
                     break
         if not encontrado:
             label_status.config(
