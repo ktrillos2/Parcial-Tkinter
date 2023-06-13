@@ -566,15 +566,17 @@ class Admin:
                 ), correo_entry.get(), contrasena_entry.get()
             ),
         )
-    def actualizar_cajero(self, cajero, nombre, correo, contrasena, numero_documento):
+        actualizar_cajero_button.grid(row=5, column=0, columnspan=2, pady=10)
+    
+    def actualizar_cajero(self, cajero, nombre,numero_documento, correo, contrasena ):
         # Verificar campos vacíos
         if nombre == "" or numero_documento == "" or correo == "" or contrasena == "":
             messagebox.showerror(
                 "Error", "Por favor, complete todos los campos.")
             return
 
-        # Verificar correo válido
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+        # Verificar correo válido}
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", correo):
             messagebox.showerror("Error", "El correo ingresado es inválido.")
             return
 
@@ -1019,7 +1021,7 @@ class Usuario:
         )
         actualizar_usuario_button.grid(row=7, column=0, columnspan=2, pady=10)
  
-    def actualizar_usuario(self, usuario1, nombre, correo, contrasena, numero_documento, telefono, direccion):
+    def actualizar_usuario(self, usuario1, nombre,numero_documento, correo, contrasena,  telefono, direccion):
         # Verificar campos vacíos
         if nombre == "" or numero_documento == "" or correo == "" or contrasena == "" or telefono == "" or direccion == "":
             messagebox.showerror(
