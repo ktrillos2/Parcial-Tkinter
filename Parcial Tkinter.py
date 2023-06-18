@@ -786,8 +786,11 @@ class Admin:
         ventana_hija.geometry("400x300")
         icon_photo = tk.PhotoImage(file="Icono.png")
         # Establecer la imagen como icono de la ventana
-
         ventana_hija.iconphoto(False, icon_photo)
+
+        # Hacer que la ventana hija sea modal
+        ventana_hija.grab_set()
+
         # Etiqueta de título
         titulo_label = tk.Label(ventana_hija, text="Detalles de la Factura", font=("Arial", 14, "bold"), bg=color_terciario)
         titulo_label.pack(pady=10)
@@ -797,7 +800,7 @@ class Admin:
         detalles_texto.pack(padx=20, pady=10, fill=tk.BOTH, expand=True)
 
         # Insertar los detalles en el cuadro de texto
-        detalles_texto.insert(tk.END," " + str(detalles1).replace("{", "").replace("}", "").replace("]", "").replace("[", "").replace("'", "").replace(",", ",\n"))
+        detalles_texto.insert(tk.END, " " + str(detalles1).replace("{", "").replace("}", "").replace("]", "").replace("[", "").replace("'", "").replace(",", ",\n"))
 
         # Configurar scrollbar para el cuadro de texto
         scrollbar = tk.Scrollbar(ventana_hija, command=detalles_texto.yview)
@@ -807,13 +810,10 @@ class Admin:
         # Botón de cierre de la ventana hija
         cerrar_boton = tk.Button(ventana_hija, text="Cerrar", command=ventana_hija.destroy, font=("Arial", 12))
         cerrar_boton.pack(pady=10)
-        self.root.update_idletasks()
-        width = self.root.winfo_width()
-        height = self.root.winfo_height()
-        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.root.winfo_screenheight() // 2) - (height // 2)
-        self.root.geometry(f"{width}x{height}+{x}+{y}")
 
+        self.root.wait_window(ventana_hija)  # Bloquear interacción con la ventana principal
+
+       
     def VerFacturasPorFecha(self):
         # Destruir la tabla de cajeros si ya existe
         for widget in self.root.winfo_children():
