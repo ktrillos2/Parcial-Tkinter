@@ -767,7 +767,7 @@ class Admin:
             total_label.grid(row=i, column=4, padx=(20, 10), pady=5)
 
             detalles_label = tk.Button(
-                table_frame, text="Mirar detalles", bg=color_terciario, command=lambda detalles1=detalles: self.mostrar_detalles(detalles1))
+                table_frame, text="Mirar detalles", bg="yellow", command=lambda detalles1=detalles: self.mostrar_detalles(detalles1))
             detalles_label.grid(row=i, column=5, padx=(20, 10), pady=5)
 
             
@@ -784,7 +784,10 @@ class Admin:
         # Configurar el estilo de la ventana hija
         ventana_hija.configure(bg=color_terciario)
         ventana_hija.geometry("400x300")
+        icon_photo = tk.PhotoImage(file="Icono.png")
+        # Establecer la imagen como icono de la ventana
 
+        ventana_hija.iconphoto(False, icon_photo)
         # Etiqueta de título
         titulo_label = tk.Label(ventana_hija, text="Detalles de la Factura", font=("Arial", 14, "bold"), bg=color_terciario)
         titulo_label.pack(pady=10)
@@ -847,10 +850,10 @@ class Admin:
             bg=color_secundario,
         )
         buscar_button.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
-
+        self.root.bind("<Return>", lambda event: self.buscar_facturas_por_fecha(fecha_entry.get()))
 
     def buscar_facturas_por_fecha(self, fecha):
-        # Verificar que se haya ingresado una fecha válida
+    # Verificar que se haya ingresado una fecha válida
         if not fecha:
             messagebox.showerror("Error", "Ingrese una fecha válida.")
             return
@@ -867,32 +870,64 @@ class Admin:
             factura for factura in facturas if factura[2] == fecha.strftime("%d/%m/%Y")
         ]
 
-        # Mostrar las facturas filtradas en una tabla
-        # Crear la tabla de facturas
+        # Crear una nueva ventana para mostrar las facturas
+        ventana_facturas = tk.Toplevel(self.root)
+        ventana_facturas.title("Facturas por Fecha")
+        ventana_facturas.configure(bg=color_terciario)
+
+        # Crear el marco de la tabla de facturas
         table_frame = tk.Frame(
-            self.root, bg=color_terciario, bd=1, relief=tk.SOLID)
-        table_frame.pack(padx=10, pady=(100, 10), ipadx=10, ipady=10)
+            ventana_facturas, bg=color_terciario, bd=1, relief=tk.SOLID
+        )
+        table_frame.pack(padx=10, pady=10, ipadx=10, ipady=10)
 
         # Título de la tabla
         titulo = tk.Label(
-            table_frame, text="Facturas por Fecha", font=("Arial", 14, "bold"), bg=color_terciario
+            table_frame,
+            text="Facturas por Fecha",
+            font=("Arial", 14, "bold"),
+            bg=color_terciario,
         )
         titulo.grid(row=0, column=0, columnspan=5, pady=10)
 
         # Encabezados de las columnas
         headers = ["ID", "Cliente", "Fecha", "Detalles", "Tipo Pago", "Total"]
         for col, header in enumerate(headers):
-            label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), bg=color_terciario)
+            label = tk.Label(
+                table_frame, text=header, font=("Arial", 12, "bold"), bg=color_terciario
+            )
             label.grid(row=1, column=col, padx=5, pady=5)
 
         # Mostrar las facturas en la tabla
+        for col, header in enumerate(headers):
+            table_frame.grid_columnconfigure(col, weight=1)
+
         for row, factura in enumerate(facturas_filtradas, start=2):
             for col, value in enumerate(factura):
-                label = tk.Label(table_frame, text=value, font=("Arial", 12), bg=color_terciario)
-                label.grid(row=row, column=col, padx=5, pady=5)
-
-
-
+                if col == 3:  # Columna de detalles
+                    detalles_button = tk.Button(
+                        table_frame,
+                        text="Ver Detalles",
+                        command=lambda detalles1=factura[3]: self.mostrar_detalles(detalles1),
+                        font=("Arial", 10),
+                        bg="yellow",
+                    )
+                    detalles_button.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+                elif col == 5:  # Columna de Total
+                    label = tk.Label(
+                        table_frame,
+                        text=value["Total"],
+                        font=("Arial", 12),
+                        bg=color_terciario,
+                    )
+                    label.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+                else:
+                    label = tk.Label(
+                        table_frame, text=value, font=("Arial", 12), bg=color_terciario
+                    )
+                    label.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+   
+   
     def VerFacturasPorCajero(self):
         for widget in self.root.winfo_children():
             widget.destroy()
