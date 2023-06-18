@@ -115,7 +115,7 @@ facturas = [
         8,
         "Tomas",
         "12/03/2021",
-        {
+        [{
             "tipo": "Vasos",
             "tamaño": "Doble",
             "sabor": ["vainilla chips", "cereza"],
@@ -126,7 +126,7 @@ facturas = [
             "tamaño": "Litro de helado",
             "sabor": ["vainilla chips"],
             "precio": 27000,
-        },"caja",
+        }],"caja",
         {"Total": 35400},
     ],
     [
@@ -686,7 +686,7 @@ class Admin:
         self.herramientas()
         # Crear la tabla de facturas dentro de un widget Canvas
         canvas = tk.Canvas(self.root, bg=color_terciario, highlightbackground=color_terciario)
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=20, pady=20)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=60, pady=20)
 
         # Crear un scrollbar y asociarlo al widget Canvas
         scrollbar = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=canvas.yview)
@@ -723,29 +723,28 @@ class Admin:
         fecha_label.grid(row=1, column=2, padx=(20, 10), pady=5)
 
         tipo_label = tk.Label(
-            table_frame, text="Tipo", font=("Arial", 12, "bold"), bg=color_terciario
+            table_frame, text="Tipo de Compra", font=("Arial", 12, "bold"), bg=color_terciario
         )
         tipo_label.grid(row=1, column=3, padx=(20, 10), pady=5)
 
-        sabores_label = tk.Label(
-            table_frame, text="Sabores", font=("Arial", 12, "bold"), bg=color_terciario
+        total_label = tk.Label(
+            table_frame, text="Total", font=("Arial", 12, "bold"), bg=color_terciario
         )
-        sabores_label.grid(row=1, column=5, padx=(20, 10), pady=5)
+        total_label.grid(row=1, column=4, padx=(20, 10), pady=5)
 
-        precio_label = tk.Label(
-            table_frame, text="Precio", font=("Arial", 12, "bold"), bg=color_terciario
+        detalles_label = tk.Label(
+            table_frame, text="Detalles", font=("Arial", 12, "bold"), bg=color_terciario
         )
-        precio_label.grid(row=1, column=6, padx=(20, 10), pady=5)
+        detalles_label.grid(row=1, column=5, padx=(20, 10), pady=5)
 
         # Mostrar datos de las facturas en la tabla
         for i, factura in enumerate(facturas, start=2):
             factura_id = factura[0]
             correo = factura[1]
             fecha = factura[2]
-            tipo = factura[3]["tipo"]
-            tamaño = factura[3]["tamaño"]
-            sabores = ", ".join(factura[3]["sabor"])
-            precio = factura[3]["precio"]
+            tipo = factura[4]
+            detalles=factura[3]
+            total = factura[5]["Total"]
 
             id_label = tk.Label(
                 table_frame, text=factura_id, bg=color_terciario)
@@ -763,18 +762,54 @@ class Admin:
                 table_frame, text=tipo, bg=color_terciario)
             tipo_label.grid(row=i, column=3, padx=(20, 10), pady=5)
 
-            sabores_label = tk.Label(
-                table_frame, text=sabores, bg=color_terciario)
-            sabores_label.grid(row=i, column=5, padx=(20, 10), pady=5)
+            total_label = tk.Label(
+                table_frame, text=total, bg=color_terciario)
+            total_label.grid(row=i, column=4, padx=(20, 10), pady=5)
 
-            precio_label = tk.Label(
-                table_frame, text=precio, bg=color_terciario)
-            precio_label.grid(row=i, column=6, padx=(20, 10), pady=5)
+            detalles_label = tk.Button(
+                table_frame, text="Mirar detalles", bg=color_terciario, command=lambda detalles1=detalles: self.mostrar_detalles(detalles1))
+            detalles_label.grid(row=i, column=5, padx=(20, 10), pady=5)
+
+            
 
         # Mostrar datos de las facturas en la tabla
         # ...
 
         # Puedes implementar la lógica para mostrar las facturas en la tabla según tus necesidades
+    def mostrar_detalles(self, detalles1):
+    # Función que se ejecuta al hacer clic en el botón de detalles
+        ventana_hija = tk.Toplevel(self.root)
+        ventana_hija.title("Detalles de la Factura")
+
+        # Configurar el estilo de la ventana hija
+        ventana_hija.configure(bg=color_terciario)
+        ventana_hija.geometry("400x300")
+
+        # Etiqueta de título
+        titulo_label = tk.Label(ventana_hija, text="Detalles de la Factura", font=("Arial", 14, "bold"), bg=color_terciario)
+        titulo_label.pack(pady=10)
+
+        # Cuadro de texto para mostrar los detalles
+        detalles_texto = tk.Text(ventana_hija, font=("Arial", 12), bg="white", height=10, wrap=tk.WORD)
+        detalles_texto.pack(padx=20, pady=10, fill=tk.BOTH, expand=True)
+
+        # Insertar los detalles en el cuadro de texto
+        detalles_texto.insert(tk.END," " + str(detalles1).replace("{", "").replace("}", "").replace("]", "").replace("[", "").replace("'", "").replace(",", ",\n"))
+
+        # Configurar scrollbar para el cuadro de texto
+        scrollbar = tk.Scrollbar(ventana_hija, command=detalles_texto.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        detalles_texto.configure(yscrollcommand=scrollbar.set)
+
+        # Botón de cierre de la ventana hija
+        cerrar_boton = tk.Button(ventana_hija, text="Cerrar", command=ventana_hija.destroy, font=("Arial", 12))
+        cerrar_boton.pack(pady=10)
+        self.root.update_idletasks()
+        width = self.root.winfo_width()
+        height = self.root.winfo_height()
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        self.root.geometry(f"{width}x{height}+{x}+{y}")
 
     def VerFacturasPorFecha(self):
         # Destruir la tabla de cajeros si ya existe
