@@ -1232,13 +1232,12 @@ class Admin:
         # Puedes implementar la lógica para mostrar las facturas en la tabla según tus necesidades
 
     def mostrar_detalles(self, detalles1):
-        # Función que se ejecuta al hacer clic en el botón de detalles
         ventana_hija = tk.Toplevel(self.root)
         ventana_hija.title("Detalles de la Factura")
 
         # Configurar el estilo de la ventana hija
         ventana_hija.configure(bg=color_terciario)
-        ventana_hija.geometry("400x300")
+        ventana_hija.geometry("600x400")
         icon_photo = tk.PhotoImage(file="Icono.png")
         # Establecer la imagen como icono de la ventana
         ventana_hija.iconphoto(False, icon_photo)
@@ -1247,51 +1246,63 @@ class Admin:
         ventana_hija.grab_set()
 
         # Etiqueta de título
-        titulo_label = tk.Label(
-            ventana_hija,
-            text="Detalles de la Factura",
-            font=("Arial", 14, "bold"),
-            bg=color_terciario,
-        )
+        titulo_label = tk.Label(ventana_hija, text="Detalles de las Facturas", font=("Arial", 14, "bold"), bg=color_terciario)
         titulo_label.pack(pady=10)
 
-        # Cuadro de texto para mostrar los detalles
-        detalles_texto = tk.Text(
-            ventana_hija, font=("Arial", 12), bg="white", height=10, wrap=tk.WORD
-        )
-        detalles_texto.pack(padx=20, pady=10, fill=tk.BOTH, expand=True)
+        # Crear el árbol de la tabla
+        tabla = ttk.Treeview(ventana_hija, height=10)
+        tabla.pack(padx=20, pady=10, fill=tk.BOTH, expand=True)
 
-        # Insertar los detalles en el cuadro de texto
-        detalles_texto.insert(
-            tk.END,
-            " "
-            + str(detalles1)
-            .replace("{", "")
-            .replace("}", "")
-            .replace("]", "")
-            .replace("[", "")
-            .replace("'", "")
-            .replace(",", ",\n"),
-        )
+        # Configurar columnas
+        tabla['columns'] = ('Tipo', 'Tamaño', 'Sabores', 'Precio')
 
-        # Configurar scrollbar para el cuadro de texto
-        scrollbar = tk.Scrollbar(ventana_hija, command=detalles_texto.yview)
+        # Formatear los encabezados de columna
+        tabla.heading('Tipo', text='Tipo')
+        tabla.heading('Tamaño', text='Tamaño')
+        tabla.heading('Sabores', text='Sabores')
+        tabla.heading('Precio', text='Precio')
+
+        # Ajustar el ancho de las columnas
+        tabla.column('Tipo', width=100)
+        tabla.column('Tamaño', width=120)
+        tabla.column('Sabores', width=150)
+        tabla.column('Precio', width=50)
+
+        # Ajustar el alto de las filas
+        tabla['show'] = 'headings'
+        tabla.configure(style='Treeview')
+
+        # Mostrar los detalles de la factura en la tabla
+        if isinstance(detalles1, dict):
+            # Caso en que detalles1 es un diccionario
+            tipo = detalles1['tipo']
+            tamaño = detalles1['tamaño']
+            sabores = ', '.join(detalles1['sabor'])
+            precio = detalles1['precio']
+            tabla.insert('', 'end', values=(tipo, tamaño, sabores, precio))
+        elif isinstance(detalles1, list):
+            # Caso en que detalles1 es una lista de diccionarios
+            for detalle in detalles1:
+                tipo = detalle['tipo']
+                tamaño = detalle['tamaño']
+                sabores = ', '.join(detalle['sabor'])
+                precio = detalle['precio']
+                tabla.insert('', 'end', values=(tipo, tamaño, sabores, precio))
+
+        # Configurar scrollbar para la tabla
+        scrollbar = ttk.Scrollbar(ventana_hija, orient='vertical', command=tabla.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        detalles_texto.configure(yscrollcommand=scrollbar.set)
+        tabla.configure(yscrollcommand=scrollbar.set)
+
+        # Centrar el texto en las celdas de la tabla
+        for column in tabla['columns']:
+            tabla.column(column, anchor='center')
 
         # Botón de cierre de la ventana hija
-        cerrar_boton = tk.Button(
-            ventana_hija,
-            text="Cerrar",
-            command=ventana_hija.destroy,
-            font=("Arial", 12),
-        )
+        cerrar_boton = tk.Button(ventana_hija, text="Cerrar", command=ventana_hija.destroy, font=("Arial", 12))
         cerrar_boton.pack(pady=10)
 
-        self.root.wait_window(
-            ventana_hija
-        )  # Bloquear interacción con la ventana principal
-
+        self.root.wait_window(ventana_hija)
     def VerFacturasPorFecha(self):
         # Destruir la tabla de cajeros si ya existe
         for widget in self.root.winfo_children():
@@ -1336,7 +1347,7 @@ class Admin:
         )
 
     def buscar_facturas_por_fecha(self, fecha):
-        # Verificar que se haya ingresado una fecha válida
+    # Verificar que se haya ingresado una fecha válida
         if not fecha:
             messagebox.showerror("Error", "Ingrese una fecha válida.")
             return
@@ -1357,6 +1368,9 @@ class Admin:
         ventana_facturas = tk.Toplevel(self.root)
         ventana_facturas.title("Facturas por Fecha")
         ventana_facturas.configure(bg=color_terciario)
+
+        # Hacer que la ventana hija sea modal
+        ventana_facturas.grab_set()
 
         # Crear el marco de la tabla de facturas
         table_frame = tk.Frame(
@@ -1414,6 +1428,7 @@ class Admin:
                     )
                     label.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
 
+        self.root.wait_window(ventana_facturas)
     def VerFacturasPorCajero(self):
         for widget in self.root.winfo_children():
             widget.destroy()
