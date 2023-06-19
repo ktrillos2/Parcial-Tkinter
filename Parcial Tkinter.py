@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 from tkinter import Menu
 import datetime
 
-lista= []   
+lista = []
 correo = "juliandgr123@email.com"
 fecha = "15/06/2023"
 filas = []
@@ -70,7 +70,6 @@ facturas = [
         "keiner@gmail.com",
         "21/03/2023",
         {
-            "tipo": "Ensalada de frutas",
             "tamaño": "para compartir sin helado",
             "sabor": ["Ensalada de frutas sin helado"],
             "precio": 10200,
@@ -83,7 +82,6 @@ facturas = [
         "Andres",
         "26/03/2023",
         {
-            "tipo": "Fresas",
             "tamaño": "Fresas con helado",
             "sabor": ["vainilla chips"],
             "precio": 8400,
@@ -96,7 +94,6 @@ facturas = [
         "Felipe",
         "21/03/2023",
         {
-            "tipo": "Granizados",
             "tamaño": "Granizado 16 onz",
             "sabor": ["fresa"],
             "precio": 8400,
@@ -109,7 +106,6 @@ facturas = [
         "Felipe",
         "12/01/2023",
         {
-            "tipo": "Banana split",
             "tamaño": "Banana split",
             "sabor": ["fresa", "ron con pasas"],
             "precio": 13200,
@@ -122,7 +118,6 @@ facturas = [
         "Felipe",
         "10/04/2023",
         {
-            "tipo": "Banana split",
             "tamaño": "Banana split",
             "sabor": ["fresa", "ron con pasas"],
             "precio": 13200,
@@ -135,7 +130,6 @@ facturas = [
         "Andres",
         "12/08/2019",
         {
-            "tipo": "Ensalada de frutas",
             "tamaño": "para compartir con helado",
             "sabor": ["vainilla chips", "tropical de agua"],
             "precio": 14500,
@@ -148,7 +142,6 @@ facturas = [
         "Andres",
         "12/08/2019",
         {
-            "tipo": "Ensalada de frutas",
             "tamaño": "para compartir con helado",
             "sabor": ["vainilla chips", "tropical de agua"],
             "precio": 14500,
@@ -162,13 +155,11 @@ facturas = [
         "12/03/2021",
         [
             {
-                "tipo": "Vasos",
                 "tamaño": "Doble",
                 "sabor": ["vainilla chips", "cereza"],
                 "precio": 8400,
             },
             {
-                "tipo": "Litro de helado",
                 "tamaño": "Litro de helado",
                 "sabor": ["vainilla chips"],
                 "precio": 27000,
@@ -182,7 +173,6 @@ facturas = [
         "Andres",
         "19/04/2022",
         {
-            "tipo": "Copas infantiles",
             "tamaño": "Fiesta",
             "sabor": ["maracuya en leche", "nata"],
             "precio": 8800,
@@ -195,7 +185,6 @@ facturas = [
         "Felipe",
         "18/02/2023",
         {
-            "tipo": " Malteadas",
             "tamaño": "Malteada 12 onz",
             "sabor": ["maracuya en leche"],
             "precio": 6400,
@@ -208,7 +197,6 @@ facturas = [
         "Tomas",
         "25/03/2023",
         {
-            "tipo": "Banana split",
             "tamaño": "Banana split",
             "sabor": ["frutos rojos", "chicle"],
             "precio": 13200,
@@ -221,7 +209,6 @@ facturas = [
         "Tomas",
         "01/01/2021",
         {
-            "tipo": "Copas infantiles",
             "tamaño": "piñata",
             "sabor": ["crocante"],
             "precio": 10800,
@@ -234,7 +221,6 @@ facturas = [
         "Tomas",
         "06/04/2022",
         {
-            "tipo": "Granizados",
             "tamaño": "Granizado 16 onz",
             "sabor": ["fresa"],
             "precio": 8400,
@@ -247,7 +233,6 @@ facturas = [
         "Felipe",
         "30/04/2022",
         {
-            "tipo": "Ensalada de frutas",
             "tamaño": "para compartir con helado",
             "sabor": ["tropical de agua", "maracuya en agua"],
             "precio": 14500,
@@ -260,7 +245,6 @@ facturas = [
         "Andres",
         "12/02/2023",
         {
-            "tipo": "Conos",
             "tamaño": "Doble",
             "sabor": ["maracuya en agua", "tropical de agua"],
             "precio": 8400,
@@ -410,7 +394,7 @@ class Admin:
                 text="Eliminar",
                 command=lambda c=cajero: self.eliminar_cajero(c),
                 bg="red",
-                fg="white"
+                fg="white",
             )
             eliminar_button.grid(row=i, column=3, padx=5, pady=5)
 
@@ -786,8 +770,12 @@ class Admin:
                         ]
                         for column_index, data in enumerate(product_data, start=1):
                             if column_index == 2:  # Descripción del producto
-                                if len(data) > 100:  # Verificar si la descripción supera el ancho máximo
-                                    data = data[:100] + "..."  # Cortar el texto y agregar los 3 puntos al final
+                                if (
+                                    len(data) > 100
+                                ):  # Verificar si la descripción supera el ancho máximo
+                                    data = (
+                                        data[:100] + "..."
+                                    )  # Cortar el texto y agregar los 3 puntos al final
 
                                 data_label = tk.Label(
                                     content_frame,
@@ -989,14 +977,14 @@ class Admin:
             self.form_frame_content = tk.Frame(
                 self.root, bg=color_terciario, bd=1, relief=tk.SOLID
             )
-            self.form_frame_content.pack( pady=(50), ipadx=10, ipady=10)
+            self.form_frame_content.pack(pady=(50), ipadx=10, ipady=10)
 
             # Campo de entrada para el nombre de la categoría nueva
             label_new_category = tk.Label(
                 self.form_frame_content, text="Nombre de categoría:"
             )
             label_new_category.config(bg=color_terciario)
-            label_new_category.grid(row=0, column=0, sticky=tk.E,padx=10,pady=10)
+            label_new_category.grid(row=0, column=0, sticky=tk.E, padx=10, pady=10)
 
             entry_new_category = tk.Entry(self.form_frame_content)
             entry_new_category.grid(row=0, column=1)
@@ -1018,7 +1006,7 @@ class Admin:
                 self.form_frame_content,
                 text="Agregar Categoría",
                 command=agregar_categoria_nueva,
-                bg=color_principal
+                bg=color_principal,
             )
             btn_add_category.grid(row=1, column=0, columnspan=2, pady=10)
 
@@ -1032,13 +1020,13 @@ class Admin:
             self.form_frame_content = tk.Frame(
                 self.root, bg=color_terciario, bd=1, relief=tk.SOLID
             )
-            self.form_frame_content.pack( pady=(50), ipadx=10, ipady=10)
+            self.form_frame_content.pack(pady=(50), ipadx=10, ipady=10)
 
             # Campo de selección de categoría existente
             label_category = tk.Label(
                 self.form_frame_content, text="Categoría existente:", bg=color_terciario
             )
-            label_category.grid(row=0, column=0, sticky=tk.E,padx=10,pady=10)
+            label_category.grid(row=0, column=0, sticky=tk.E, padx=10, pady=10)
 
             categories_list = list(categories.keys())
             selected_category = tk.StringVar(self.form_frame_content)
@@ -1047,12 +1035,12 @@ class Admin:
             combo_category = tk.OptionMenu(
                 self.form_frame_content, selected_category, *categories_list
             )
-            combo_category.grid(row=0, column=1, padx=10,pady=10)
+            combo_category.grid(row=0, column=1, padx=10, pady=10)
 
             label_title = tk.Label(
                 self.form_frame_content, text="Título:", bg=color_terciario
             )
-            label_title.grid(row=1, column=0, sticky=tk.E,pady=2)
+            label_title.grid(row=1, column=0, sticky=tk.E, pady=2)
 
             entry_title = tk.Entry(self.form_frame_content)
             entry_title.grid(row=1, column=1)
@@ -1060,7 +1048,7 @@ class Admin:
             label_description = tk.Label(
                 self.form_frame_content, text="Descripción:", bg=color_terciario
             )
-            label_description.grid(row=2, column=0, sticky=tk.E,pady=2)
+            label_description.grid(row=2, column=0, sticky=tk.E, pady=2)
 
             entry_description = tk.Entry(self.form_frame_content)
             entry_description.grid(row=2, column=1)
@@ -1068,7 +1056,7 @@ class Admin:
             label_price = tk.Label(
                 self.form_frame_content, text="Precio:", bg=color_terciario
             )
-            label_price.grid(row=3, column=0, sticky=tk.E,pady=2)
+            label_price.grid(row=3, column=0, sticky=tk.E, pady=2)
 
             entry_price = tk.Entry(self.form_frame_content)
             entry_price.grid(row=3, column=1)
@@ -1082,12 +1070,16 @@ class Admin:
                     price = entry_price.get().strip()
 
                     if not title or not description or not price:
-                        messagebox.showerror("Error", "Por favor, complete todos los campos.")
+                        messagebox.showerror(
+                            "Error", "Por favor, complete todos los campos."
+                        )
                         return
 
                     # Validar el formato del precio
                     if not price.isnumeric():
-                        messagebox.showerror("Error", "Por favor, ingrese un precio válido.")
+                        messagebox.showerror(
+                            "Error", "Por favor, ingrese un precio válido."
+                        )
                         return
 
                     price = "${:,.0f}".format(int(price))
@@ -1104,15 +1096,16 @@ class Admin:
                     entry_description.delete(0, tk.END)
                     entry_price.delete(0, tk.END)
                 else:
-                    messagebox.showerror("Error", "Por favor, seleccione una categoría existente.")
-
+                    messagebox.showerror(
+                        "Error", "Por favor, seleccione una categoría existente."
+                    )
 
             # Botón para agregar el producto
             btn_add_product = tk.Button(
                 self.form_frame_content,
                 text="Agregar Producto",
                 command=agregar_producto,
-                bg=color_principal
+                bg=color_principal,
             )
             btn_add_product.grid(row=4, column=0, columnspan=2, pady=10)
 
@@ -1184,14 +1177,6 @@ class Admin:
         )
         fecha_label.grid(row=1, column=2, padx=(20, 10), pady=5)
 
-        tipo_label = tk.Label(
-            table_frame,
-            text="Tipo de Compra",
-            font=("Arial", 12, "bold"),
-            bg=color_terciario,
-        )
-        tipo_label.grid(row=1, column=3, padx=(20, 10), pady=5)
-
         total_label = tk.Label(
             table_frame, text="Total", font=("Arial", 12, "bold"), bg=color_terciario
         )
@@ -1207,7 +1192,6 @@ class Admin:
             factura_id = factura[0]
             correo = factura[1]
             fecha = factura[2]
-            tipo = factura[4]
             detalles = factura[3]
             total = factura[5]["Total"]
 
@@ -1220,8 +1204,6 @@ class Admin:
             fecha_label = tk.Label(table_frame, text=fecha, bg=color_terciario)
             fecha_label.grid(row=i, column=2, padx=(20, 10), pady=5)
 
-            tipo_label = tk.Label(table_frame, text=tipo, bg=color_terciario)
-            tipo_label.grid(row=i, column=3, padx=(20, 10), pady=5)
 
             total_label = tk.Label(table_frame, text=total, bg=color_terciario)
             total_label.grid(row=i, column=4, padx=(20, 10), pady=5)
@@ -1254,7 +1236,12 @@ class Admin:
         ventana_hija.grab_set()
 
         # Etiqueta de título
-        titulo_label = tk.Label(ventana_hija, text="Detalles de las Facturas", font=("Arial", 14, "bold"), bg=color_terciario)
+        titulo_label = tk.Label(
+            ventana_hija,
+            text="Detalles de las Facturas",
+            font=("Arial", 14, "bold"),
+            bg=color_terciario,
+        )
         titulo_label.pack(pady=10)
 
         # Crear el árbol de la tabla
@@ -1262,55 +1249,57 @@ class Admin:
         tabla.pack(padx=20, pady=10, fill=tk.BOTH, expand=True)
 
         # Configurar columnas
-        tabla['columns'] = ('Tipo', 'Tamaño', 'Sabores', 'Precio')
+        tabla["columns"] = ( "Tamaño", "Sabores", "Precio")
 
         # Formatear los encabezados de columna
-        tabla.heading('Tipo', text='Tipo')
-        tabla.heading('Tamaño', text='Tamaño')
-        tabla.heading('Sabores', text='Sabores')
-        tabla.heading('Precio', text='Precio')
+        tabla.heading("Tamaño", text="Tamaño")
+        tabla.heading("Sabores", text="Sabores")
+        tabla.heading("Precio", text="Precio")
 
         # Ajustar el ancho de las columnas
-        tabla.column('Tipo', width=100)
-        tabla.column('Tamaño', width=120)
-        tabla.column('Sabores', width=150)
-        tabla.column('Precio', width=50)
+        tabla.column("Tamaño", width=120)
+        tabla.column("Sabores", width=150)
+        tabla.column("Precio", width=50)
 
         # Ajustar el alto de las filas
-        tabla['show'] = 'headings'
-        tabla.configure(style='Treeview')
+        tabla["show"] = "headings"
+        tabla.configure(style="Treeview")
 
         # Mostrar los detalles de la factura en la tabla
         if isinstance(detalles1, dict):
             # Caso en que detalles1 es un diccionario
-            tipo = detalles1['tipo']
-            tamaño = detalles1['tamaño']
-            sabores = ', '.join(detalles1['sabor'])
-            precio = detalles1['precio']
-            tabla.insert('', 'end', values=(tipo, tamaño, sabores, precio))
+            tamaño = detalles1["tamaño"]
+            sabores = ", ".join(detalles1["sabor"])
+            precio = detalles1["precio"]
+            tabla.insert("", "end", values=( tamaño, sabores, precio))
         elif isinstance(detalles1, list):
             # Caso en que detalles1 es una lista de diccionarios
             for detalle in detalles1:
-                tipo = detalle['tipo']
-                tamaño = detalle['tamaño']
-                sabores = ', '.join(detalle['sabor'])
-                precio = detalle['precio']
-                tabla.insert('', 'end', values=(tipo, tamaño, sabores, precio))
+                tamaño = detalle["tamaño"]
+                sabores = ", ".join(detalle["sabor"])
+                precio = detalle["precio"]
+                tabla.insert("", "end", values=( tamaño, sabores, precio))
 
         # Configurar scrollbar para la tabla
-        scrollbar = ttk.Scrollbar(ventana_hija, orient='vertical', command=tabla.yview)
+        scrollbar = ttk.Scrollbar(ventana_hija, orient="vertical", command=tabla.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         tabla.configure(yscrollcommand=scrollbar.set)
 
         # Centrar el texto en las celdas de la tabla
-        for column in tabla['columns']:
-            tabla.column(column, anchor='center')
+        for column in tabla["columns"]:
+            tabla.column(column, anchor="center")
 
         # Botón de cierre de la ventana hija
-        cerrar_boton = tk.Button(ventana_hija, text="Cerrar", command=ventana_hija.destroy, font=("Arial", 12))
+        cerrar_boton = tk.Button(
+            ventana_hija,
+            text="Cerrar",
+            command=ventana_hija.destroy,
+            font=("Arial", 12),
+        )
         cerrar_boton.pack(pady=10)
 
         self.root.wait_window(ventana_hija)
+
     def VerFacturasPorFecha(self):
         # Destruir la tabla de cajeros si ya existe
         for widget in self.root.winfo_children():
@@ -1355,7 +1344,7 @@ class Admin:
         )
 
     def buscar_facturas_por_fecha(self, fecha):
-    # Verificar que se haya ingresado una fecha válida
+        # Verificar que se haya ingresado una fecha válida
         if not fecha:
             messagebox.showerror("Error", "Ingrese una fecha válida.")
             return
@@ -1376,7 +1365,7 @@ class Admin:
         ventana_facturas = tk.Toplevel(self.root)
         ventana_facturas.title("Facturas por Fecha")
         ventana_facturas.configure(bg=color_terciario)
-        
+
         icon_photo = tk.PhotoImage(file="Icono.png")
         # Establecer la imagen como icono de la ventana
         ventana_facturas.iconphoto(False, icon_photo)
@@ -1440,6 +1429,7 @@ class Admin:
                     label.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
 
         self.root.wait_window(ventana_facturas)
+
     def VerFacturasPorCajero(self):
         for widget in self.root.winfo_children():
             widget.destroy()
@@ -1456,7 +1446,6 @@ class Admin:
 
 class Cajero:
     def __init__(self, root):
-        
         self.root = root
         self.current_category = None
         self.carrito = None
@@ -1466,7 +1455,9 @@ class Cajero:
         self.root.title("Cajero")
 
         # Configure the cart
-        self.carrito = ttk.Treeview(self.root, columns=("Producto", "Sabores", "Cantidad", "Precio"))
+        self.carrito = ttk.Treeview(
+            self.root, columns=("Producto", "Sabores", "Cantidad", "Precio")
+        )
         self.carrito.heading("#1", text="Producto")
         self.carrito.heading("#2", text="Sabores")
         self.carrito.heading("#3", text="Cantidad")
@@ -1475,25 +1466,29 @@ class Cajero:
     def Ventana_principal(self):
         for widget in self.root.winfo_children():
             widget.destroy()
-            
+
         self.create_menu()
-            # Create widgets
+
+        # Configure the main window
+        self.root.title("Cajero")
+        # Create widgets
         self.category_frame = ttk.Frame(self.root)
         self.product_frame = ttk.Frame(self.root)
         self.details_frame = None
         self.selected_category_label = ttk.Label(self.root, text="")
         # Configure the category frame
-        self.category_frame.grid(row=0, column=0, padx=20, pady=10)
+        self.category_frame.grid(row=1, column=1, padx=20, pady=10)
 
         # Show the selected category label
-        self.selected_category_label.grid(
-            row=1, column=0, padx=10, pady=5, sticky="w")
-
+        self.selected_category_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
 
         # Create buttons for the categories
         for i, category in enumerate(categories.keys()):
             category_button = ttk.Button(
-                self.category_frame, text=category, command=lambda c=category: self.show_category(c))
+                self.category_frame,
+                text=category,
+                command=lambda c=category: self.show_category(c),
+            )
             category_button.grid(row=i, column=0, padx=10, pady=5)
 
         # Configure the product frame
@@ -1511,7 +1506,9 @@ class Cajero:
         carrito_label.grid(row=0, column=0, padx=10, pady=5)
 
         # Create the carrito Treeview
-        self.carrito = ttk.Treeview(self.carrito_frame, columns=("Producto", "Sabores", "Cantidad", "Precio"))
+        self.carrito = ttk.Treeview(
+            self.carrito_frame, columns=("Producto", "Sabores", "Cantidad", "Precio")
+        )
         self.carrito.grid(row=1, column=0, padx=10, pady=5)
         self.carrito.heading("#0", text="Producto")
         self.carrito.heading("#1", text="Sabores")
@@ -1519,7 +1516,11 @@ class Cajero:
         self.carrito.heading("#3", text="Precio")
 
         # Create the eliminar button
-        eliminar_button = ttk.Button(self.carrito_frame, text="Eliminar Producto", command=self.remove_selected_product)
+        eliminar_button = ttk.Button(
+            self.carrito_frame,
+            text="Eliminar Producto",
+            command=self.remove_selected_product,
+        )
         eliminar_button.grid(row=2, column=0, padx=10, pady=5)
 
         # Create the total label and textbox
@@ -1527,9 +1528,11 @@ class Cajero:
         total_label.grid(row=3, column=0, padx=10, pady=5, sticky="e")
         self.total_textbox = ttk.Entry(self.carrito_frame, state="readonly")
         self.total_textbox.grid(row=3, column=1, padx=10, pady=5, sticky="w")
-        realizar_compra_button = ttk.Button(self.carrito_frame, text="Realizar compra", command=self.show_pending_orders)
+        realizar_compra_button = ttk.Button(
+            self.carrito_frame, text="Realizar compra", command=self.show_pending_orders
+        )
         realizar_compra_button.grid(row=2, column=1, padx=10, pady=5)
-        
+
     def show_categories(self):
         self.current_category = None
         if self.details_frame:
@@ -1545,9 +1548,11 @@ class Cajero:
             messagebox.showerror("Error", "Please select a flavor.")
         else:
             product_title = product["title"]
-            if product_title == "Product 2" :
+            if product_title == "Product 2":
                 if flavor2 is None or flavor2 == "":
-                    messagebox.showerror("Error", "Please select a second flavor for Product 2.")
+                    messagebox.showerror(
+                        "Error", "Please select a second flavor for Product 2."
+                    )
                     return
                 products.append((product_title, quantity, flavor1, flavor2))
             else:
@@ -1562,7 +1567,9 @@ class Cajero:
         self.details_frame = ttk.Frame(self.root)
         self.details_frame.grid(row=0, column=0, padx=20, pady=10)
         title_label = ttk.Label(
-            self.details_frame, text="Title: " + product["title"] + " - Price: " + product["price"])
+            self.details_frame,
+            text="Title: " + product["title"] + " - Price: " + product["price"],
+        )
         title_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
         image = Image.open(product["image_path"])
         image = image.resize((200, 200), Image.ANTIALIAS)
@@ -1576,22 +1583,31 @@ class Cajero:
         quantity_spinbox.grid(row=2, column=1, padx=10, pady=5, sticky="w")
         flavor1_label = ttk.Label(self.details_frame, text="Flavor 1:")
         flavor1_label.grid(row=3, column=0, padx=10, pady=5, sticky="w")
-        flavor_combobox1 = ttk.Combobox(self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"])
+        flavor_combobox1 = ttk.Combobox(
+            self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"]
+        )
         flavor_combobox1.grid(row=3, column=1, padx=10, pady=5, sticky="w")
         if product["title"] == "Product 2" and self.current_category == "Category 1":
             flavor2_label = ttk.Label(self.details_frame, text="Flavor 2:")
             flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
-            flavor_combobox2 = ttk.Combobox(self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"])
+            flavor_combobox2 = ttk.Combobox(
+                self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"]
+            )
             flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         add_to_cart_button = ttk.Button(
-            self.details_frame, text="Add to cart",
+            self.details_frame,
+            text="Add to cart",
             command=lambda: self.add_to_cart(
-                product, quantity_spinbox.get(), flavor_combobox1.get(),
-                flavor_combobox2.get() if "flavor_combobox2" in locals() else None
-            )
+                product,
+                quantity_spinbox.get(),
+                flavor_combobox1.get(),
+                flavor_combobox2.get() if "flavor_combobox2" in locals() else None,
+            ),
         )
         add_to_cart_button.grid(row=5, column=0, padx=10, pady=5, sticky="w")
-        back_button = ttk.Button(self.details_frame, text="Back to menu", command=self.show_categories)
+        back_button = ttk.Button(
+            self.details_frame, text="Back to menu", command=self.show_categories
+        )
         back_button.grid(row=5, column=1, padx=10, pady=5, sticky="e")
 
     def show_category(self, category):
@@ -1609,17 +1625,128 @@ class Cajero:
             image_label = ttk.Label(self.product_frame, image=photo)
             image_label.image = photo
             image_label.grid(row=i, column=1, padx=10, pady=5)
-            description_label = ttk.Label(self.product_frame, text=product["description"])
+            description_label = ttk.Label(
+                self.product_frame, text=product["description"]
+            )
             description_label.grid(row=i, column=2, padx=10, pady=5, sticky="w")
-            price_label = ttk.Label(self.product_frame, text="Price: " + product["price"])
+            price_label = ttk.Label(
+                self.product_frame, text="Price: " + product["price"]
+            )
             price_label.grid(row=i, column=3, padx=10, pady=5, sticky="w")
-            buy_button = ttk.Button(self.product_frame, text="Buy", command=lambda p=product: self.show_details(p))
+            buy_button = ttk.Button(
+                self.product_frame,
+                text="Buy",
+                command=lambda p=product: self.show_details(p),
+            )
             buy_button.grid(row=i, column=4, padx=10, pady=5)
         self.product_frame.grid()
         self.category_frame.grid_remove()
-        back_button = ttk.Button(self.product_frame, text="Back to main menu", command=self.show_categories)
+        back_button = ttk.Button(
+            self.product_frame, text="Back to main menu", command=self.show_categories
+        )
         back_button.grid(row=i + 1, column=0, columnspan=3, padx=10, pady=5, sticky="w")
 
+    def ver_facturas(self):
+        # Eliminar todos los widgets de la ventana
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        self.create_menu()
+
+        # Crear la tabla de facturas dentro de un widget Canvas
+        canvas = tk.Canvas(
+            self.root,
+            bg=color_terciario,
+            highlightbackground=color_terciario,
+            width=480,
+            height=520,
+        )
+        canvas.grid(row=1, column=1, sticky="nsew", padx=60, pady=20)
+
+        # Crear un scrollbar y asociarlo al widget Canvas
+        scrollbar = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar.grid(row=1, column=2, sticky="ns")
+
+        # Configurar el scrollbar para que controle el widget Canvas
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.bind(
+            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        # Crear un frame dentro del widget Canvas para contener la tabla
+        table_frame = tk.Frame(
+            canvas,
+            bg=color_terciario,
+            highlightbackground="black",
+            highlightthickness=1,
+        )
+        canvas.create_window((0, 0), window=table_frame, anchor=tk.NW)
+
+        # Título de la tabla
+        titulo = tk.Label(
+            table_frame, text="Facturas", font=("Arial", 14, "bold"), bg=color_terciario
+        )
+        titulo.grid(row=0, column=0, columnspan=6)
+
+        # Encabezados de las columnas
+        id_label = tk.Label(
+            table_frame, text="ID", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        id_label.grid(row=1, column=0, padx=(30, 10), pady=5, sticky="w")
+
+        correo_label = tk.Label(
+            table_frame, text="Correo", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        correo_label.grid(row=1, column=1, padx=(20, 10), pady=5, sticky="w")
+
+        fecha_label = tk.Label(
+            table_frame, text="Fecha", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        fecha_label.grid(row=1, column=2, padx=(20, 10), pady=5, sticky="w")
+
+
+        total_label = tk.Label(
+            table_frame, text="Total", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        total_label.grid(row=1, column=4, padx=(20, 10), pady=5, sticky="w")
+
+        detalles_label = tk.Label(
+            table_frame, text="Detalles", font=("Arial", 12, "bold"), bg=color_terciario
+        )
+        detalles_label.grid(
+            row=1, column=5, columnspan=2, padx=(20, 10), pady=5, sticky="w"
+        )
+
+        # Mostrar datos de las facturas en la tabla
+        for i, factura in enumerate(facturas, start=2):
+            factura_id = factura[0]
+            correo = factura[1]
+            fecha = factura[2]
+            detalles = factura[3]
+            total = factura[5]["Total"]
+
+            id_label = tk.Label(table_frame, text=factura_id, bg=color_terciario)
+            id_label.grid(row=i, column=0, padx=(20, 10), pady=5, sticky="w")
+
+            correo_label = tk.Label(table_frame, text=correo, bg=color_terciario)
+            correo_label.grid(row=i, column=1, padx=(20, 10), pady=5, sticky="w")
+
+            fecha_label = tk.Label(table_frame, text=fecha, bg=color_terciario)
+            fecha_label.grid(row=i, column=2, padx=(20, 10), pady=5, sticky="w")
+
+
+            total_label = tk.Label(table_frame, text=total, bg=color_terciario)
+            total_label.grid(row=i, column=4, padx=(20, 10), pady=5, sticky="w")
+
+            detalles_label = tk.Button(
+                table_frame,
+                text="Mirar detalles",
+                bg="yellow",
+                command=lambda detalles1=detalles: Admin(self.root).mostrar_detalles(detalles1),
+            )
+            detalles_label.grid(
+                row=i, column=5, columnspan=2, padx=(20, 10), pady=5, sticky="w"
+            )
 
     def carrito_compras(self):
         self.carrito.delete(*self.carrito.get_children())
@@ -1630,7 +1757,9 @@ class Cajero:
             flavors = ", ".join(product[2:])
             price = self.get_product_price(product_title)
             total_price = quantity * price
-            self.carrito.insert("", "end", text=product_title, values=(flavors, quantity, total_price))
+            self.carrito.insert(
+                "", "end", text=product_title, values=(flavors, quantity, total_price)
+            )
 
         total = self.calculate_total()
         self.total_textbox.configure(state="normal")
@@ -1676,39 +1805,55 @@ class Cajero:
     def create_menu(self):
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
-    
+
         # Crea el menú "Pedidos pendientes"
-    
+
         # Crea el menú "Pedidos para entregar"
         entregar_menu = Menu(menubar, tearoff=0)
         entregar_menu.add_command(label="Ver pedidos para entregar")
         menubar.add_cascade(label="Pedidos para entregar", menu=entregar_menu)
-        
-       
+
         # Crea el menú "Facturas"
         facturas_menu = Menu(menubar, tearoff=0)
         facturas_menu.add_command(label="Ver facturas")
         menubar.add_cascade(label="Facturas", menu=facturas_menu)
-        
+
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
-        
+
         pendientes_menu = Menu(menubar, tearoff=0)
-        pendientes_menu.add_command(label="Ver pedidos pendientes", command=self.view_pending_orders)
-        pendientes_menu.add_command(label="Ver pedidos para entregar", command=self.view_entregar_orders)
-        pendientes_menu.add_command(label="Ver Facturas", command=print("hola"))
-        
+        pendientes_menu.add_command(
+            label="Ver pedidos pendientes", command=self.view_pending_orders
+        )
+        pendientes_menu.add_command(
+            label="Ver pedidos para entregar", command=self.view_entregar_orders
+        )
+        pendientes_menu.add_command(label="Ver Facturas", command=self.ver_facturas)
+
         menubar.add_cascade(label="Pedidos", menu=pendientes_menu)
-        
-    
+
+        # Create the "Volver arriba" button
+        image = Image.open("BotonVolver.png")
+        nuevo_tamaño = (40, 40)
+        imagen_nueva = image.resize(nuevo_tamaño)
+        background_image = ImageTk.PhotoImage(imagen_nueva)
+        button_regresar = tk.Button(
+            self.root,
+            image=background_image,
+            command=lambda: Admin(self.root).volver(),
+            bg=color_terciario,
+        )
+        button_regresar.image = background_image
+        button_regresar.grid(row=0, column=0)
+
     def create_invoice(self):
         filas_adicionales = []
         invoice = ""
         total = 0
-        Producto_Factura_Individual=[]
-        Producto_Factura_Conjunta=[]
-        Producto_Factura_Conjunta_Filtro=[]
-        Producto_Factura_Total=[]
+        Producto_Factura_Individual = []
+        Producto_Factura_Conjunta = []
+        Producto_Factura_Conjunta_Filtro = []
+        Producto_Factura_Total = []
         for item in self.carrito.get_children():
             product = self.carrito.item(item)
             product_title = product["text"]
@@ -1730,7 +1875,7 @@ class Cajero:
         Producto_Factura_Conjunta_Filtro.append(Producto_Factura_Conjunta[0])
         Producto_Factura_Total.append(Producto_Factura_Conjunta_Filtro)
         Producto_Factura_Total.append(total)
-        #print(Producto_Factura_Conjunta)
+        # print(Producto_Factura_Conjunta)
         print(Producto_Factura_Total)
         lista.append(invoice)
         print(lista)
@@ -1741,9 +1886,9 @@ class Cajero:
         print(filas_adicionales)
         filas.append(filas_adicionales)
         print(filas)
-        
+
         return invoice
- 
+
     def clear_cart(self):
         self.carrito.delete(*self.carrito.get_children())
         products = []
@@ -1753,16 +1898,18 @@ class Cajero:
 
     def show_pending_orders(self):
         if self.carrito.get_children():
-            answer = messagebox.askyesno("Confirmation", "Do you want to create an invoice for pending orders?")
+            answer = messagebox.askyesno(
+                "Confirmation", "Do you want to create an invoice for pending orders?"
+            )
             if answer:
                 invoice = self.create_invoice()
                 pending_orders.append(invoice)
                 messagebox.showinfo("Pending Orders", invoice)
                 self.clear_cart()
-                
+
         else:
             messagebox.showinfo("No Pending Orders", "There are no pending orders.")
-        
+
     def view_pending_orders(self):
         if pending_orders:
             orders = "\n".join(pending_orders)
@@ -1770,16 +1917,23 @@ class Cajero:
             self.actualizar_tabla(self.root)
         else:
             messagebox.showinfo("No Pending Orders", "There are no pending orders.")
-        
-# ----- Pedidos pendientes
-    def actualizar_tabla(self,root):
+
+    # ----- Pedidos pendientes
+    def actualizar_tabla(self, root):
         # Eliminar todos los widgets de la ventana
         for widget in self.root.winfo_children():
             widget.destroy()
-                
+
         self.create_menu()
         # Crear títulos de la tabla
-        titulos = ['Correo', 'Fecha', 'Detalles', 'Total', 'Aceptar Pedido', 'Cancelar Pedido']
+        titulos = [
+            "Correo",
+            "Fecha",
+            "Detalles",
+            "Total",
+            "Aceptar Pedido",
+            "Cancelar Pedido",
+        ]
         for i, titulo in enumerate(titulos):
             label = tk.Label(root, text=titulo)
             label.grid(row=0, column=i, padx=5, pady=5)
@@ -1788,41 +1942,59 @@ class Cajero:
         for i, fila in enumerate(filas):
             for j, valor in enumerate(fila):
                 if j == 2:
-                    btn_detalles = ttk.Button(root, text='Detalles', command=lambda detalles=valor: self.ver_detalles(detalles))
-                    btn_detalles.grid(row=i+1, column=j, padx=5, pady=5)
+                    btn_detalles = ttk.Button(
+                        root,
+                        text="Detalles",
+                        command=lambda detalles=valor: self.ver_detalles(detalles),
+                    )
+                    btn_detalles.grid(row=i + 1, column=j, padx=5, pady=5)
                 else:
                     label = ttk.Label(root, text=valor)
-                    label.grid(row=i+1, column=j, padx=5, pady=5)
+                    label.grid(row=i + 1, column=j, padx=5, pady=5)
 
             # Crear botones de pedido
             seccion_pedido = ttk.Frame(root)
-            seccion_pedido.grid(row=i+1, column=4, columnspan=2, padx=5, pady=5)
-            
-            btn_aceptar = ttk.Button(seccion_pedido, text='Aceptar Pedido', command=lambda fila=fila: self.aceptar_pedido(fila))
-            btn_cancelar = ttk.Button(seccion_pedido, text='Cancelar Pedido', command=lambda fila=fila: self.cancelar_pedido(fila))
+            seccion_pedido.grid(row=i + 1, column=4, columnspan=2, padx=5, pady=5)
 
-            btn_aceptar.pack(side='left', padx=5, pady=5)
-            btn_cancelar.pack(side='left', padx=5, pady=5)
+            btn_aceptar = ttk.Button(
+                seccion_pedido,
+                text="Aceptar Pedido",
+                command=lambda fila=fila: self.aceptar_pedido(fila),
+            )
+            btn_cancelar = ttk.Button(
+                seccion_pedido,
+                text="Cancelar Pedido",
+                command=lambda fila=fila: self.cancelar_pedido(fila),
+            )
+
+            btn_aceptar.pack(side="left", padx=5, pady=5)
+            btn_cancelar.pack(side="left", padx=5, pady=5)
 
         # Obtener el número de filas actuales
         num_filas_actuales = len(filas)
 
         # Botón "volver menu"
-        btn_volver_menu = ttk.Button(root, text='Volver al menu', command=lambda:self.remover_ver_pedidos())
-        btn_volver_menu.grid(row=num_filas_actuales+1, column=0, columnspan=6, padx=5, pady=5)
-        
+        btn_volver_menu = ttk.Button(
+            root, text="Volver al menu", command=lambda: self.remover_ver_pedidos()
+        )
+        btn_volver_menu.grid(
+            row=num_filas_actuales + 1, column=0, columnspan=6, padx=5, pady=5
+        )
 
-
-    def aceptar_pedido(self,fila):
+    def aceptar_pedido(self, fila):
         # Lógica para aceptar el pedido
-        pedidos_aceptados.append(fila)  # Guardar los datos de la fila en la lista de pedidos aceptados
-        filas.remove(fila)  # Remover la fila de la lista de filas  # Actualizar la tabla en la interfaz
+        pedidos_aceptados.append(
+            fila
+        )  # Guardar los datos de la fila en la lista de pedidos aceptados
+        filas.remove(
+            fila
+        )  # Remover la fila de la lista de filas  # Actualizar la tabla en la interfaz
         print("Pedido aceptado")
         print(filas)
         print(pedidos_aceptados)
         self.actualizar_tabla(self.root)
-        
-    def cancelar_pedido(self,fila):
+
+    def cancelar_pedido(self, fila):
         # Lógica para cancelar el pedido
         filas.remove(fila)  # Remover la fila de la lista de filas
 
@@ -1830,27 +2002,28 @@ class Cajero:
         print(filas)
         self.actualizar_tabla(self.root)
 
-    def ver_detalles(self,detalles):
+    def ver_detalles(self, detalles):
         # Imprimir los detalles del pedido
         messagebox.showinfo("Pending Orders", detalles)
-    
-#------ pedidos para entregar 
+
+    # ------ pedidos para entregar
     def view_entregar_orders(self):
         if pending_orders:
             orders = "\n".join(pending_orders)
             messagebox.showinfo("Pending Orders", orders)
-            
+
             self.actualizar_tabla2(self.root)
         else:
             messagebox.showinfo("No Pending Orders", "There are no pending orders.")
-    def actualizar_tabla2(self,root):
+
+    def actualizar_tabla2(self, root):
         # Eliminar todos los widgets de la ventana
         for widget in self.root.winfo_children():
             widget.destroy()
-                
+
         self.create_menu()
         # Crear títulos de la tabla
-        titulos = ['Correo', 'Fecha', 'Detalles', 'Total', 'Entregar pedido']
+        titulos = ["Correo", "Fecha", "Detalles", "Total", "Entregar pedido"]
         for i, titulo in enumerate(titulos):
             label = tk.Label(root, text=titulo)
             label.grid(row=0, column=i, padx=5, pady=5)
@@ -1859,45 +2032,58 @@ class Cajero:
         for i, fila in enumerate(pedidos_aceptados):
             for j, valor in enumerate(pedidos_aceptados):
                 if j == 2:
-                    btn_detalles = ttk.Button(root, text='Detalles', command=lambda detalles=valor: self.ver_detalles2(detalles))
-                    btn_detalles.grid(row=i+1, column=j, padx=5, pady=5)
+                    btn_detalles = ttk.Button(
+                        root,
+                        text="Detalles",
+                        command=lambda detalles=valor: self.ver_detalles2(detalles),
+                    )
+                    btn_detalles.grid(row=i + 1, column=j, padx=5, pady=5)
                 else:
                     label = ttk.Label(root, text=valor)
-                    label.grid(row=i+1, column=j, padx=5, pady=5)
+                    label.grid(row=i + 1, column=j, padx=5, pady=5)
 
             # Crear botones de pedido
             seccion_pedido = ttk.Frame(root)
-            seccion_pedido.grid(row=i+1, column=4, columnspan=2, padx=5, pady=5)
-            
-            btn_aceptar = ttk.Button(seccion_pedido, text='Entregar pedido', command=lambda fila=fila: self.aceptar_pedido2(fila))
+            seccion_pedido.grid(row=i + 1, column=4, columnspan=2, padx=5, pady=5)
 
-            btn_aceptar.pack(side='left', padx=5, pady=5)
+            btn_aceptar = ttk.Button(
+                seccion_pedido,
+                text="Entregar pedido",
+                command=lambda fila=fila: self.aceptar_pedido2(fila),
+            )
+
+            btn_aceptar.pack(side="left", padx=5, pady=5)
 
         # Obtener el número de filas actuales
         num_filas_actuales = len(filas)
 
         # Botón "volver menu"
-        btn_volver_menu = ttk.Button(root, text='Volver al menu', command=lambda:self.remover_ver_pedidos())
-        btn_volver_menu.grid(row=num_filas_actuales+1, column=0, columnspan=6, padx=5, pady=5)
-        
+        btn_volver_menu = ttk.Button(
+            root, text="Volver al menu", command=lambda: self.remover_ver_pedidos()
+        )
+        btn_volver_menu.grid(
+            row=num_filas_actuales + 1, column=0, columnspan=6, padx=5, pady=5
+        )
 
-
-    def aceptar_pedido2(self,fila):
+    def aceptar_pedido2(self, fila):
         # Lógica para aceptar el pedido
-        facturas.append(fila)  # Guardar los datos de la fila en la lista de pedidos aceptados
-        pedidos_aceptados.remove(fila)  # Remover la fila de la lista de filas  # Actualizar la tabla en la interfaz
+        facturas.append(
+            fila
+        )  # Guardar los datos de la fila en la lista de pedidos aceptados
+        pedidos_aceptados.remove(
+            fila
+        )  # Remover la fila de la lista de filas  # Actualizar la tabla en la interfaz
         print("Pedido aceptado")
         print(filas)
         print(pedidos_aceptados)
         print(facturas)
         self.actualizar_tabla(self.root)
 
-    def ver_detalles2(self,detalles):
+    def ver_detalles2(self, detalles):
         # Imprimir los detalles del pedido
-        messagebox.showinfo("Pending Orders", detalles) 
+        messagebox.showinfo("Pending Orders", detalles)
 
-    def remover_ver_pedidos(self): 
-        
+    def remover_ver_pedidos(self):
         self.Ventana_principal()
 
 
@@ -2131,8 +2317,8 @@ class Usuario:
 class Inicio:
     def __init__(self) -> None:
         self.root = tk.Tk()
-        # self.usuario = Usuario(self.root)
-        self.Inicio_sesion()
+        self.usuario = Usuario(self.root)
+        # self.Inicio_sesion()
         self.Pruebas()
         pass
 
@@ -2152,8 +2338,8 @@ class Inicio:
         # Crear el widget Label con la imagen de fondo
         self.background_label = tk.Label(self.root, image=self.background_image)
         self.background_label.place(x=0, y=-150, relwidth=1, relheight=1)
-        
-        Cajero(self.root).Ventana_principal()
+
+        Cajero(self.root).ver_facturas()
 
     def login(self, root, label_status, usuario, contraseña):
         encontrado = False
