@@ -1368,7 +1368,10 @@ class Admin:
         ventana_facturas = tk.Toplevel(self.root)
         ventana_facturas.title("Facturas por Fecha")
         ventana_facturas.configure(bg=color_terciario)
-
+        
+        icon_photo = tk.PhotoImage(file="Icono.png")
+        # Establecer la imagen como icono de la ventana
+        ventana_facturas.iconphoto(False, icon_photo)
         # Hacer que la ventana hija sea modal
         ventana_facturas.grab_set()
 
