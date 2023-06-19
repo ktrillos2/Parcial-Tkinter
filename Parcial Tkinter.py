@@ -2131,8 +2131,8 @@ class Usuario:
 class Inicio:
     def __init__(self) -> None:
         self.root = tk.Tk()
-        self.usuario = Usuario(self.root)
-        # self.Inicio_sesion()
+        # self.usuario = Usuario(self.root)
+        self.Inicio_sesion()
         self.Pruebas()
         pass
 
