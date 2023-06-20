@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.simpledialog
 from tkinter import ttk
 import re
 import datetime
@@ -11,8 +12,8 @@ lista = []
 filas = []  # pedidos_ pendientes
 pedidos_aceptados = []  # pedidos_entregar
 
-facturas_pendientes = [] # pedidos_pendientes
-facutras_entregar = [] # pedidos_entregar
+facturas_pendientes = []  # pedidos_pendientes
+facutras_entregar = []  # pedidos_entregar
 
 facturas = []
 
@@ -978,7 +979,7 @@ class Admin:
                 font=("Arial", 12, "bold"),
                 bg=color_terciario,
             )
-            label.grid(row=0, column=index, padx=15, pady=5)
+            label.grid(row=0, column=index, padx=30, pady=5)
 
         # Crear un canvas para el desplazamiento vertical
         canvas = tk.Canvas(
@@ -1733,7 +1734,118 @@ class Admin:
             widget.destroy()
 
         self.herramientas()
-        pass
+
+        # Crear un Frame para contener los elementos de la interfaz
+        frame = tk.Frame(self.root, bg=color_terciario)
+        frame.pack(padx=20, pady=20)
+
+        # Crear el título "Buscar facturas por cajero"
+        titulo_label = tk.Label(frame, text="Buscar facturas por cajero", font=("Arial", 16, "bold"), bg=color_terciario)
+        titulo_label.pack(pady=10)
+
+        # Crear el Label y Entry para ingresar el usuario del cajero
+        usuario_label = tk.Label(frame, text="Ingresa el usuario del cajero:", font=("Arial", 12, "bold"), bg=color_terciario)
+        usuario_label.pack(side=tk.LEFT, padx=10, pady=10)
+
+        usuario_entry = tk.Entry(frame)
+        usuario_entry.pack(side=tk.LEFT, padx=10, pady=10)
+        
+        no_existe_label = tk.Label(frame, text="", font=("Arial", 14, "bold"), bg=color_terciario)
+
+
+        def mostrar_facturas():
+            no_existe_label.config(text="")
+            no_existe_label.pack_forget()
+            cajero_usuario = usuario_entry.get()
+
+            cajero_existente = False
+            facturas_cajero = []
+
+            # Buscar facturas correspondientes al cajero
+            for usuario in usuarios:
+                if usuario[0] == cajero_usuario and usuario[2] == "cajero":
+                    cajero_existente = True
+                    cajero_correo = usuario[1]
+                    for factura in facturas:
+                        if factura[1] == cajero_correo:
+                            facturas_cajero.append(factura)
+                    break
+
+            if cajero_existente:
+                # Destruir los elementos anteriores
+                for widget in frame.winfo_children():
+                    widget.destroy()
+
+                # Crear la tabla de facturas filtradas por cajero
+                tabla_frame = tk.Frame(frame, bg=color_terciario, highlightbackground="black", highlightthickness=1)
+                tabla_frame.pack(padx=60, pady=20)
+
+                titulo = tk.Label(tabla_frame, text="Facturas", font=("Arial", 16, "bold"), bg=color_terciario)
+                titulo.grid(row=0, column=0, columnspan=7)
+
+                # Encabezados de las columnas
+                id_label = tk.Label(tabla_frame, text="ID", font=("Arial", 12, "bold"), bg=color_terciario)
+                id_label.grid(row=1, column=0, padx=(30, 10), pady=5)
+
+                correo_label = tk.Label(tabla_frame, text="Correo", font=("Arial", 12, "bold"), bg=color_terciario)
+                correo_label.grid(row=1, column=1, padx=(20, 10), pady=5)
+
+                fecha_label = tk.Label(tabla_frame, text="Fecha", font=("Arial", 12, "bold"), bg=color_terciario)
+                fecha_label.grid(row=1, column=2, padx=(20, 10), pady=5)
+
+                total_label = tk.Label(tabla_frame, text="Total", font=("Arial", 12, "bold"), bg=color_terciario)
+                total_label.grid(row=1, column=4, padx=(20, 10), pady=5)
+
+                detalles_label = tk.Label(tabla_frame, text="Detalles", font=("Arial", 12, "bold"), bg=color_terciario)
+                detalles_label.grid(row=1, column=5, padx=(20, 10), pady=5)
+
+                # Mostrar facturas del cajero en la tabla
+                for i, factura in enumerate(facturas_cajero, start=2):
+                    factura_id = factura[0]
+                    correo = factura[1]
+                    fecha = factura[2]
+                    detalles = factura[3]
+                    total = factura[5]["Total"]
+
+                    id_label = tk.Label(tabla_frame, text=factura_id, bg=color_terciario)
+                    id_label.grid(row=i, column=0, padx=(20, 10), pady=5)
+
+                    correo_label = tk.Label(tabla_frame, text=correo, bg=color_terciario)
+                    correo_label.grid(row=i, column=1, padx=(20, 10), pady=5)
+
+                    fecha_label = tk.Label(tabla_frame, text=fecha, bg=color_terciario)
+                    fecha_label.grid(row=i, column=2, padx=(20, 10), pady=5)
+
+                    total_label = tk.Label(tabla_frame, text=total, bg=color_terciario)
+                    total_label.grid(row=i, column=4, padx=(20, 10), pady=5)
+
+                    detalles_label = tk.Button(
+                        tabla_frame,
+                        text="Mirar detalles",
+                        bg="yellow",
+                        command=lambda detalles1=detalles: self.mostrar_detalles(detalles1),
+                    )
+                    detalles_label.grid(row=i, column=5, padx=(20, 10), pady=5)
+                    # Destruir el mensaje anterior de cajero no existe
+                    no_existe_label.config(text="")
+                    no_existe_label.pack_forget()
+
+            else:
+                no_existe_label.config(text="El cajero no existe")
+                no_existe_label.pack(padx=20, pady=20,anchor="center")
+
+        # Crear un botón para mostrar las facturas del cajero
+        mostrar_button = tk.Button(frame, text="Mostrar Facturas", bg=color_secundario, command=mostrar_facturas)
+        mostrar_button.pack(pady=10)
+
+        # Establecer el fondo de la ventana y de los elementos
+        self.root.config(bg=color_terciario)
+        frame.config(bg=color_terciario)
+        titulo_label.config(bg=color_terciario)
+        usuario_label.config(bg=color_terciario)
+        usuario_entry.config(bg="white")
+        mostrar_button.config(bg=color_secundario)
+
 
 
 class Cajero:
@@ -1743,7 +1855,7 @@ class Cajero:
         self.current_category = None
         self.carrito = None
         self.create_menu()
-        self.usuario=None
+        self.usuario = None
 
         # Configure the main window
         self.root.title("Cajero")
@@ -1759,7 +1871,7 @@ class Cajero:
         self.carrito.heading("#2", text="Cantidad")
         self.carrito.heading("#3", text="Precio")
 
-    def Ventana_principal(self,usuario):
+    def Ventana_principal(self, usuario):
         if usuario is not None:
             self.usuario = usuario
         for widget in self.root.winfo_children():
@@ -1954,12 +2066,13 @@ class Cajero:
         )
         flavor_combobox1.grid(row=3, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox2 = None
-        print(product,"producto de")
+        print(product, "producto de")
         if "doble" or "triple" in product["title"].lower() or "double" in product["title"].lower():
             flavor2_label = ttk.Label(self.details_frame, text="Flavor 2:")
             flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
             flavor_combobox2 = ttk.Combobox(
-                self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"]
+                self.details_frame, values=[
+                    "Vanilla", "Chocolate", "Strawberry"]
             )
             flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox3 = None
@@ -1968,7 +2081,8 @@ class Cajero:
             flavor3_label = ttk.Label(self.details_frame, text="Flavor 3:")
             flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
             flavor_combobox3 = ttk.Combobox(
-                self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"]
+                self.details_frame, values=[
+                    "Vanilla", "Chocolate", "Strawberry"]
             )
             flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
         add_to_cart_button = ttk.Button(
@@ -2195,7 +2309,7 @@ class Cajero:
         button_regresar.image = background_image
         button_regresar.grid(row=0, column=0)
 
-    def create_invoice(self,paymenth_method):
+    def create_invoice(self, paymenth_method):
         filas_adicionales = []
         invoice = ""
         total = 0
@@ -2203,7 +2317,7 @@ class Cajero:
         Producto_Factura_Conjunta = []
         Producto_Factura_Conjunta_Filtro = []
         Producto_Factura_Total = []
-        productos=[]
+        productos = []
         for item in self.carrito.get_children():
             product = self.carrito.item(item)
             product_title = product["text"]
@@ -2221,17 +2335,18 @@ class Cajero:
             invoice += f"Quantity: {quantity}\n"
             invoice += f"Total Price: {total_price}\n"
             invoice += "------------------------\n"
-            producto = {"tamaño": product_title, "sabor": flavors, "precio": total_price}
+            producto = {"tamaño": product_title,
+                        "sabor": flavors, "precio": total_price}
             productos.append(producto)
         invoice += f"Total: {total}\n"
         Producto_Factura_Conjunta_Filtro.append(Producto_Factura_Conjunta[0])
         Producto_Factura_Total.append(Producto_Factura_Conjunta_Filtro)
         Producto_Factura_Total.append(total)
-        
+
         print(Producto_Factura_Total, "aquí es")
         lista.append(invoice)
         print(lista)
-        
+
         filas_adicionales.append(18)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
@@ -2239,10 +2354,10 @@ class Cajero:
         filas_adicionales.append(paymenth_method)
         filas_adicionales.append({"Total": total})
         print(filas_adicionales)
-        
+
         filas.append(filas_adicionales)
         print(filas)
-        
+
         return invoice
 
     def clear_cart(self):
@@ -2266,7 +2381,7 @@ class Cajero:
                     payment_method = "online"
                 else:
                     payment_method = "caja"
-                    
+
                 invoice = self.create_invoice(payment_method)
                 pending_orders.append(invoice)
                 messagebox.showinfo("Pending Orders", invoice)
@@ -2307,7 +2422,6 @@ class Cajero:
             label = tk.Label(root, text=titulo)
             label.grid(row=0, column=i, padx=5, pady=5)
 
-
         # Crear contenido de la tabla
         for i, fila in enumerate(filas):
             for j, valor in enumerate(fila):
@@ -2320,7 +2434,8 @@ class Cajero:
                     btn_detalles = ttk.Button(
                         root,
                         text="Detalles",
-                        command=lambda detalles=detalles: messagebox.showinfo("Detalles", detalles),
+                        command=lambda detalles=detalles: messagebox.showinfo(
+                            "Detalles", detalles),
                     )
                     btn_detalles.grid(row=i + 1, column=j, padx=5, pady=5)
                 elif j == 5:
@@ -2340,7 +2455,8 @@ class Cajero:
 
             # Crear botones de pedido
             seccion_pedido = ttk.Frame(root)
-            seccion_pedido.grid(row=i + 1, column=6, columnspan=2, padx=5, pady=5)
+            seccion_pedido.grid(row=i + 1, column=6,
+                                columnspan=2, padx=5, pady=5)
 
             btn_aceptar = ttk.Button(
                 seccion_pedido,
@@ -2366,8 +2482,6 @@ class Cajero:
         btn_volver_menu.grid(
             row=num_filas_actuales + 1, column=0, columnspan=8, padx=5, pady=5
         )
-
-
 
     def aceptar_pedido(self, fila):
         # Lógica para aceptar el pedido
@@ -2426,7 +2540,6 @@ class Cajero:
             label = tk.Label(root, text=titulo)
             label.grid(row=0, column=i, padx=5, pady=5)
 
-
         # Crear contenido de la tabla
         for i, fila in enumerate(pedidos_aceptados):
             for j, valor in enumerate(fila):
@@ -2439,7 +2552,8 @@ class Cajero:
                     btn_detalles = ttk.Button(
                         root,
                         text="Detalles",
-                        command=lambda detalles=detalles: messagebox.showinfo("Detalles", detalles),
+                        command=lambda detalles=detalles: messagebox.showinfo(
+                            "Detalles", detalles),
                     )
                     btn_detalles.grid(row=i + 1, column=j, padx=5, pady=5)
                 elif j == 5:
@@ -2459,14 +2573,15 @@ class Cajero:
 
             # Crear botones de pedido
             seccion_pedido = ttk.Frame(root)
-            seccion_pedido.grid(row=i + 1, column=6, columnspan=2, padx=5, pady=5)
+            seccion_pedido.grid(row=i + 1, column=6,
+                                columnspan=2, padx=5, pady=5)
 
             btn_aceptar = ttk.Button(
                 seccion_pedido,
                 text="Entregar pedido",
                 command=lambda fila=fila: self.aceptar_pedido2(fila),
             )
-            
+
             btn_aceptar.pack(side="left", padx=5, pady=5)
 
         # Obtener el número de filas actuales
@@ -2481,7 +2596,7 @@ class Cajero:
         )
 
     def aceptar_pedido2(self, fila):
-        print(fila,"hola aqui es")
+        print(fila, "hola aqui es")
         # Lógica para aceptar el pedido
         facturas.append(
             fila
@@ -2841,12 +2956,11 @@ class Usuario:
                 payment_method = "caja"
             else:
                 payment_method = "online"
-                
+
             invoice = self.create_invoice(payment_method)
             pending_orders.append(invoice)
             messagebox.showinfo("Pending Orders", invoice)
             self.clear_cart()
-
 
     def clear_cart(self):
         self.carrito_treeview.delete(*self.carrito_treeview.get_children())
@@ -2855,7 +2969,7 @@ class Usuario:
         self.total_textbox.delete(0, "end")
         self.total_textbox.configure(state="readonly")
 
-    def create_invoice(self,payment_method):
+    def create_invoice(self, payment_method):
         filas_adicionales = []
         invoice = ""
         total = 0
@@ -3538,7 +3652,7 @@ class Inicio:
                 return
         usuarios.append(
             [correo, contrasena, "usuario", [
-                nombre, cedula, True, telefono, direccion],0]
+                nombre, cedula, True, telefono, direccion], 0]
         )
         messagebox.showinfo(
             "Registro Exitoso", "El usuario ha sido registrado exitosamente."
