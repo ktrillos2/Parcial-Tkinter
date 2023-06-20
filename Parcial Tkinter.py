@@ -1743,31 +1743,37 @@ class Admin:
         titulo_label = tk.Label(frame, text="Buscar facturas por cajero", font=("Arial", 16, "bold"), bg=color_terciario)
         titulo_label.pack(pady=10)
 
-        # Crear el Label y Entry para ingresar el usuario del cajero
-        usuario_label = tk.Label(frame, text="Ingresa el usuario del cajero:", font=("Arial", 12, "bold"), bg=color_terciario)
+        # Crear el Label y el Combobox para seleccionar el usuario del cajero
+        usuario_label = tk.Label(frame, text="Selecciona el usuario del cajero:", font=("Arial", 12, "bold"), bg=color_terciario)
         usuario_label.pack(side=tk.LEFT, padx=10, pady=10)
 
-        usuario_entry = tk.Entry(frame)
-        usuario_entry.pack(side=tk.LEFT, padx=10, pady=10)
-        
-        no_existe_label = tk.Label(frame, text="", font=("Arial", 14, "bold"), bg=color_terciario)
+        # Obtener la lista de usuarios cajeros
+        cajeros = [usuario[0] for usuario in usuarios if usuario[2] == "cajero"]
 
+        # Variable para almacenar el usuario seleccionado
+        selected_usuario = tk.StringVar()
+
+        # Crear el Combobox para seleccionar el usuario del cajero
+        usuario_combobox = ttk.Combobox(frame, textvariable=selected_usuario, values=cajeros, state="readonly")
+        usuario_combobox.pack(side=tk.LEFT, padx=10, pady=10)
+        usuario_combobox.current(0)  # Establecer el valor predeterminado
+
+        no_existe_label = tk.Label(frame, text="", font=("Arial", 14, "bold"), bg=color_terciario)
 
         def mostrar_facturas():
             no_existe_label.config(text="")
             no_existe_label.pack_forget()
-            cajero_usuario = usuario_entry.get()
+            cajero_usuario = selected_usuario.get()
 
             cajero_existente = False
             facturas_cajero = []
 
             # Buscar facturas correspondientes al cajero
             for usuario in usuarios:
-                if usuario[0] == cajero_usuario and usuario[2] == "cajero":
+                if usuario[0] == cajero_usuario:
                     cajero_existente = True
-                    cajero_correo = usuario[1]
                     for factura in facturas:
-                        if factura[4] == cajero_correo:  # Corregir la posición a [4]
+                        if factura[1] == cajero_usuario:
                             facturas_cajero.append(factura)
                     break
 
@@ -1832,7 +1838,7 @@ class Admin:
 
             else:
                 no_existe_label.config(text="El cajero no existe")
-                no_existe_label.pack(padx=20, pady=20,anchor="center")
+                no_existe_label.pack(padx=20, pady=20, anchor="center")
 
         # Crear un botón para mostrar las facturas del cajero
         mostrar_button = tk.Button(frame, text="Mostrar Facturas", bg=color_secundario, command=mostrar_facturas)
@@ -1843,8 +1849,7 @@ class Admin:
         frame.config(bg=color_terciario)
         titulo_label.config(bg=color_terciario)
         usuario_label.config(bg=color_terciario)
-        usuario_entry.config(bg="white")
-        mostrar_button.config(bg=color_secundario)
+        usuario_combobox.config(style="TCombobox")
 
 
 
@@ -2091,28 +2096,26 @@ class Cajero:
         flavor_combobox1.grid(row=3, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox2 = None
         print(product, "producto de")
-        if "doble" or "triple" in product["title"].lower() or "double" in product["title"].lower():
-            flavor2_label = ttk.Label(self.details_frame, text="Flavor 2:")
-            flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
-            flavor_combobox2 = ttk.Combobox(
-                self.details_frame, values=[
-                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
-            )
-            flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
+        flavor2_label = ttk.Label(self.details_frame, text="Flavor 2:")
+        flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
+        flavor_combobox2 = ttk.Combobox(
+            self.details_frame, values=[
+               sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+               sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+               sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+        )
+        flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox3 = None
         flavor3_label = None
-        if "triple" in product["title"].lower():
-            flavor3_label = ttk.Label(self.details_frame, text="Flavor 3:")
-            flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
-            flavor_combobox3 = ttk.Combobox(
-                self.details_frame, values=[
-                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
-            )
-            flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
+        flavor3_label = ttk.Label(self.details_frame, text="Flavor 3:")
+        flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
+        flavor_combobox3 = ttk.Combobox(
+            self.details_frame, values=[
+               sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+               sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+               sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+        )
+        flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
         add_to_cart_button = ttk.Button(
             self.details_frame,
             text="Add to Cart",
@@ -2968,6 +2971,15 @@ class Usuario:
         else:
             messagebox.showerror("Error", "Please select a product to remove.")
 
+    def calculate_total(self):
+        total = 0
+        for product in self.products:
+            product_title = product[0]
+            quantity = int(product[1])
+            price = self.get_product_price(product_title)
+            total += quantity * price
+        return total
+
     def show_categories(self, canvas=None):
         self.current_category = None
         if canvas!=None:
@@ -3119,7 +3131,6 @@ class Usuario:
             "Detalles",
             "Tipo de pago",
             "Total",
-            "Aceptar Pedido",
             "Cancelar Pedido",
         ]
         
