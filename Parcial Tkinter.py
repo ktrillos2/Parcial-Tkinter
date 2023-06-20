@@ -337,7 +337,7 @@ usuarios = [
 facturas = [
     [
         1,
-        "keiner@gmail.com",
+        "cajero1@email.com",
         "21/03/2023",
         {
             "tamaño": "para compartir sin helado",
@@ -532,7 +532,7 @@ color_cuarto = "#98D8AA"
 
 usuario = ""
 contraseña = ""
-
+id=len(facturas)+1
 
 class Admin:
     def __init__(self, root):
@@ -1767,7 +1767,7 @@ class Admin:
                     cajero_existente = True
                     cajero_correo = usuario[1]
                     for factura in facturas:
-                        if factura[1] == cajero_correo:
+                        if factura[4] == cajero_correo:  # Corregir la posición a [4]
                             facturas_cajero.append(factura)
                     break
 
@@ -1857,11 +1857,11 @@ class Cajero:
         self.create_menu()
         self.usuario = None
 
-        # Configure the main window
+        # Configurar la ventana principal
         self.root.title("Cajero")
         self.root.config(bg=color_terciario)
 
-        # Configure the cart
+        # Configurar el carrito
         self.carrito = ttk.Treeview(
             self.root,
             columns=("Producto", "Sabores", "Cantidad", "Precio")
@@ -1879,24 +1879,24 @@ class Cajero:
 
         self.create_menu()
 
-        # Configure the main window
+        # Configurar la ventana principal
         self.root.title("Cajero")
         self.root.config(bg=color_terciario)
 
-        # Create widgets
+        # Crear widgets
         self.category_frame = ttk.Frame(self.root)
         self.product_frame = ttk.Frame(self.root)
         self.details_frame = None
         self.selected_category_label = ttk.Label(self.root, text="")
 
-        # Configure the category frame
+        # Configurar el marco de categorías
         self.category_frame.grid(row=1, column=1, padx=20, pady=10)
 
-        # Show the selected category label
+        # Mostrar la etiqueta de categoría seleccionada
         self.selected_category_label.grid(
             row=2, column=0, padx=10, pady=5, sticky="w")
 
-        # Create buttons for the categories
+        # Crear botones para las categorías
         for i, category in enumerate(categories.keys()):
             category_button = ttk.Button(
                 self.category_frame,
@@ -1905,22 +1905,22 @@ class Cajero:
             )
             category_button.grid(row=i, column=0, padx=10, pady=5)
 
-        # Configure the product frame
+        # Configurar el marco de productos
         self.product_frame.grid(row=2, column=0, padx=20, pady=10)
 
-        # Start the GUI by showing the categories
+        # Iniciar la interfaz gráfica mostrando las categorías
         self.show_categories()
 
-        # Create the carrito frame
+        # Crear el marco del carrito
         self.carrito_frame = ttk.Frame(self.root)
         self.carrito_frame.grid(row=0, column=1, padx=20, pady=10)
 
-        # Create the carrito title label
+        # Crear la etiqueta del título del carrito
         carrito_label = ttk.Label(
             self.carrito_frame, text="Carrito de Compras")
         carrito_label.grid(row=0, column=0, padx=10, pady=5)
 
-        # Create the carrito Treeview
+        # Crear el Treeview del carrito
         self.carrito = ttk.Treeview(
             self.carrito_frame,
             columns=("Producto", "Sabores", "Cantidad", "Precio")
@@ -1931,7 +1931,7 @@ class Cajero:
         self.carrito.heading("#2", text="Cantidad")
         self.carrito.heading("#3", text="Precio")
 
-        # Create the eliminar button
+        # Crear el botón de eliminar
         eliminar_button = ttk.Button(
             self.carrito_frame,
             text="Eliminar Producto",
@@ -1939,7 +1939,7 @@ class Cajero:
         )
         eliminar_button.grid(row=2, column=0, padx=10, pady=5)
 
-        # Create the total label and textbox
+        # Crear la etiqueta y el cuadro de texto del total
         total_label = ttk.Label(self.carrito_frame, text="Total:")
         total_label.grid(row=3, column=0, padx=10, pady=5, sticky="e")
         self.total_textbox = ttk.Entry(self.carrito_frame, state="readonly")
@@ -1951,9 +1951,9 @@ class Cajero:
         )
         realizar_compra_button.grid(row=2, column=1, padx=10, pady=5)
 
-    def show_categories(self,canvas=None):
+    def show_categories(self, canvas=None):
         self.current_category = None
-        if canvas!=None:
+        if canvas != None:
             canvas.destroy()
 
         if self.details_frame:
@@ -1965,29 +1965,29 @@ class Cajero:
 
     def add_to_cart(self, product, quantity, flavor1, flavor2=None, flavor3=None):
         if not quantity.isdigit() or int(quantity) == 0:
-            messagebox.showerror("Error", "Please select a valid quantity.")
+            messagebox.showerror("Error", "Por favor, selecciona una cantidad válida.")
         elif flavor1 == "":
-            messagebox.showerror("Error", "Please select a flavor.")
+            messagebox.showerror("Error", "Por favor, selecciona un sabor.")
         else:
             product_title = product["title"]
             if product_title in productos_dobles:
                 if flavor2 is None or flavor2 == "":
                     messagebox.showerror(
-                        "Error", "Please select a second flavor for Product 2.")
+                        "Error", "Por favor, selecciona un segundo sabor para el Producto 2.")
                     return
                 self.products.append(
                     (product_title, quantity, flavor1, flavor2))
             elif product_title in productos_Triples:
                 if flavor3 is None or flavor3 == "":
                     messagebox.showerror(
-                        "Error", "Please select a third flavor ")
+                        "Error", "Por favor, selecciona un tercer sabor.")
                     return
                 self.products.append(
                     (product_title, quantity, flavor1, flavor2, flavor3))
             else:
                 self.products.append((product_title, quantity, flavor1))
 
-            messagebox.showinfo("Success", "Product added to cart!")
+            messagebox.showinfo("Éxito", "Producto agregado al carrito.")
             self.show_categories()
             self.carrito_compras()
 
@@ -2001,23 +2001,23 @@ class Cajero:
 
         products = categories[category]
 
-        # Create a canvas for the product frame
+        # Crear un lienzo para el marco de productos
         canvas = tk.Canvas(self.product_frame, width=600)
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        # Create a scrollbar for the canvas (vertical)
+        # Crear una barra de desplazamiento para el lienzo (vertical)
         scrollbar_y = ttk.Scrollbar(self.product_frame, orient=tk.VERTICAL, command=canvas.yview)
         scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
 
-        # Create a scrollbar for the canvas (horizontal)
+        # Crear una barra de desplazamiento para el lienzo (horizontal)
         scrollbar_x = ttk.Scrollbar(self.product_frame, orient=tk.HORIZONTAL, command=canvas.xview)
         scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
 
-        # Configure the canvas to use the scrollbars
+        # Configurar el lienzo para utilizar las barras de desplazamiento
         canvas.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
         canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
-        # Create a frame to contain the product widgets
+        # Crear un marco para contener los widgets de productos
         product_frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=product_frame, anchor="nw")
 
@@ -2035,17 +2035,17 @@ class Cajero:
             description_label = ttk.Label(product_frame, text=product["description"])
             description_label.grid(row=i, column=2, padx=10, pady=5, sticky="w")
 
-            price_label = ttk.Label(product_frame, text="Price: " + product["price"])
+            price_label = ttk.Label(product_frame, text="Precio: " + product["price"])
             price_label.grid(row=i, column=3, padx=10, pady=5, sticky="w")
 
             buy_button = ttk.Button(
                 product_frame,
-                text="Buy",
+                text="Comprar",
                 command=lambda p=product: self.show_details(p),
             )
             buy_button.grid(row=i, column=4, padx=10, pady=5)
 
-        # Bind the scrollbars to the canvas
+        # Vincular las barras de desplazamiento al lienzo
         canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(int(-1 * (e.delta / 120)), "units"))
         canvas.bind("<Shift-MouseWheel>", lambda e: canvas.xview_scroll(int(-1 * (e.delta / 120)), "units"))
 
@@ -2054,8 +2054,8 @@ class Cajero:
 
         back_button = ttk.Button(
             product_frame,
-            text="Back to main menu",
-            command=lambda:self.show_categories(canvas),
+            text="Volver al menú principal",
+            command=lambda: self.show_categories(canvas),
         )
         back_button.grid(row=i + 1, column=0, columnspan=3, padx=10, pady=5, sticky="w")
 
@@ -2375,14 +2375,13 @@ class Cajero:
         lista.append(invoice)
         print(lista)
 
-        filas_adicionales.append(18)
+        filas_adicionales.append(len(facturas)+1)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
         filas_adicionales.append(productos)
         filas_adicionales.append(paymenth_method)
         filas_adicionales.append({"Total": total})
         print(filas_adicionales)
-
         filas.append(filas_adicionales)
         print(filas)
 
@@ -2801,7 +2800,7 @@ class Usuario:
         back_button = ttk.Button(
             self.product_frame,
             text="Back to main menu",
-            command=self.show_categories,
+            command=lambda:self.show_categories(canvas),
             width=30
         )
         back_button.pack(padx=8, pady=5, anchor="w")
@@ -2948,9 +2947,10 @@ class Usuario:
         else:
             messagebox.showerror("Error", "Please select a product to remove.")
 
-    def show_categories(self):
+    def show_categories(self, canvas=None):
         self.current_category = None
-
+        if canvas!=None:
+            canvas.destroy()
         if self.details_frame:
             self.details_frame.pack_forget()
 
@@ -3016,6 +3016,7 @@ class Usuario:
                     payment_method = "online"
 
                 invoice = self.create_invoice(payment_method)
+                
                 pending_orders.append(invoice)
                 messagebox.showinfo("Pending Orders", invoice)
                 self.clear_cart()
@@ -3068,14 +3069,13 @@ class Usuario:
         lista.append(invoice)
         print(lista)
 
-        filas_adicionales.append(18)
+        filas_adicionales.append(len(facturas)+1)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
         filas_adicionales.append(productos)
         filas_adicionales.append(paymenth_method)
         filas_adicionales.append({"Total": total})
-        print(filas_adicionales)
-
+        print(filas_adicionales) 
         filas.append(filas_adicionales)
         print(filas)
 
