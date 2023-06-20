@@ -1376,7 +1376,7 @@ class Admin:
 
                     producto = {
                         "title": title,
-                        "image_path": "./noImagen.png",
+                        "image_path": "./Cono.png",
                         "description": description,
                         "price": price,
                     }
@@ -1957,8 +1957,9 @@ class Cajero:
         realizar_compra_button.grid(row=2, column=1, padx=10, pady=5)
 
     def show_categories(self, canvas=None):
+        
         self.current_category = None
-        if canvas is not None:
+        if canvas != None:
             canvas.destroy()
 
         if self.details_frame:
@@ -2064,7 +2065,6 @@ class Cajero:
         )
         back_button.grid(row=i + 1, column=0, columnspan=3, padx=10, pady=5, sticky="w")
 
-
     def show_details(self, product):
         self.category_frame.grid_forget()
         self.product_frame.grid_forget()
@@ -2072,8 +2072,8 @@ class Cajero:
         self.details_frame.grid(row=0, column=0, padx=20, pady=10)
         title_label = ttk.Label(
             self.details_frame,
-            text="Título: " + product["title"] +
-            " - Precio: " + product["price"],
+            text="Title: " + product["title"] +
+            " - Price: " + product["price"],
         )
         title_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
         image = Image.open(product["image_path"])
@@ -2082,44 +2082,46 @@ class Cajero:
         image_label = ttk.Label(self.details_frame, image=photo)
         image_label.image = photo
         image_label.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
-        quantity_label = ttk.Label(self.details_frame, text="Cantidad:")
+        quantity_label = ttk.Label(self.details_frame, text="Quantity:")
         quantity_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
         quantity_spinbox = ttk.Spinbox(self.details_frame, from_=1, to=10)
         quantity_spinbox.grid(row=2, column=1, padx=10, pady=5, sticky="w")
-        flavor1_label = ttk.Label(self.details_frame, text="Sabor 1:")
+        flavor1_label = ttk.Label(self.details_frame, text="Flavor 1:")
         flavor1_label.grid(row=3, column=0, padx=10, pady=5, sticky="w")
         flavor_combobox1 = ttk.Combobox(
             self.details_frame, values=[
-            sabores[0], sabores[1], sabores[2], sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-            sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-            sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
         )
         flavor_combobox1.grid(row=3, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox2 = None
         print(product, "producto de")
-        flavor2_label = ttk.Label(self.details_frame, text="Sabor 2:")
-        flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
-        flavor_combobox2 = ttk.Combobox(
-            self.details_frame, values=[
-            sabores[0], sabores[1], sabores[2], sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-            sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-            sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
-        )
-        flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
+        if "doble" or "triple" in product["title"].lower() or "double" in product["title"].lower():
+            flavor2_label = ttk.Label(self.details_frame, text="Flavor 2:")
+            flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
+            flavor_combobox2 = ttk.Combobox(
+                self.details_frame, values=[
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+            )
+            flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox3 = None
         flavor3_label = None
-        flavor3_label = ttk.Label(self.details_frame, text="Sabor 3:")
-        flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
-        flavor_combobox3 = ttk.Combobox(
-            self.details_frame, values=[
-            sabores[0], sabores[1], sabores[2], sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-            sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-            sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
-        )
-        flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
+        if "triple" in product["title"].lower():
+            flavor3_label = ttk.Label(self.details_frame, text="Flavor 3:")
+            flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
+            flavor_combobox3 = ttk.Combobox(
+                self.details_frame, values=[
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+            )
+            flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
         add_to_cart_button = ttk.Button(
             self.details_frame,
-            text="Agregar al carrito",
+            text="Add to Cart",
             command=lambda: self.add_to_cart(
                 product,
                 quantity_spinbox.get(),
@@ -2130,7 +2132,7 @@ class Cajero:
         )
         add_to_cart_button.grid(row=6, column=0, padx=10, pady=5, sticky="w")
         back_button = ttk.Button(
-            self.details_frame, text="Volver al menú", command=self.show_categories
+            self.details_frame, text="Back to menu", command=self.show_categories
         )
         back_button.grid(row=6, column=1, padx=10, pady=5, sticky="e")
 
@@ -2202,7 +2204,7 @@ class Cajero:
             table_frame, text="Detalles", font=("Arial", 12, "bold"), bg=color_terciario
         )
         detalles_label.grid(row=1, column=5, columnspan=2,
-                            padx=(20, 10), pady=5, sticky="w")
+                            pad1x=(20, 10), pady=5, sticky="w")
 
         # Mostrar datos de las facturas en la tabla
         for i, factura in enumerate(facturas, start=2):
@@ -2231,7 +2233,7 @@ class Cajero:
 
             detalles_label = tk.Button(
                 table_frame,
-                text="Ver detalles",
+                text="Mirar detalles",
                 bg="yellow",
                 command=lambda detalles1=detalles: Admin(
                     self.root).mostrar_detalles(detalles1),
@@ -2239,6 +2241,7 @@ class Cajero:
             detalles_label.grid(
                 row=i, column=5, columnspan=2, padx=(20, 10), pady=5, sticky="w"
             )
+
     def carrito_compras(self):
         self.carrito.delete(*self.carrito.get_children())
         self.root.config(bg=color_terciario)
@@ -2293,20 +2296,20 @@ class Cajero:
             self.total_textbox.insert(0, total)
             self.total_textbox.configure(state="readonly")
         else:
-            messagebox.showerror("Error", "Por favor selecciona un producto para eliminar.")
+            messagebox.showerror("Error", "Please select a product to remove.")
 
     def create_menu(self):
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
         self.root.config(bg=color_terciario)
-        # Create the "Pending Orders" menu
+        # Crea el menú "Pedidos pendientes"
 
-        # Create the "Orders to Deliver" menu
+        # Crea el menú "Pedidos para entregar"
         entregar_menu = Menu(menubar, tearoff=0)
         entregar_menu.add_command(label="Ver pedidos para entregar")
         menubar.add_cascade(label="Pedidos para entregar", menu=entregar_menu)
 
-        # Create the "Invoices" menu
+        # Crea el menú "Facturas"
         facturas_menu = Menu(menubar, tearoff=0)
         facturas_menu.add_command(label="Ver facturas")
         menubar.add_cascade(label="Facturas", menu=facturas_menu)
@@ -2326,7 +2329,7 @@ class Cajero:
 
         menubar.add_cascade(label="Pedidos", menu=pendientes_menu)
 
-        # Create the "Go Back" button
+        # Create the "Volver arriba" button
         image = Image.open("BotonVolver.png")
         nuevo_tamaño = (40, 40)
         imagen_nueva = image.resize(nuevo_tamaño)
@@ -2361,10 +2364,10 @@ class Cajero:
             Producto_Factura_Individual.append(total_price)
             Producto_Factura_Conjunta.append(Producto_Factura_Individual)
             total += total_price
-            invoice += f"Producto: {product_title}\n"
-            invoice += f"Sabores: {flavors}\n"
-            invoice += f"Cantidad: {quantity}\n"
-            invoice += f"Precio Total: {total_price}\n"
+            invoice += f"Product: {product_title}\n"
+            invoice += f"Flavors: {flavors}\n"
+            invoice += f"Quantity: {quantity}\n"
+            invoice += f"Total Price: {total_price}\n"
             invoice += "------------------------\n"
             producto = {"tamaño": product_title,
                         "sabor": flavors, "precio": total_price}
@@ -2389,6 +2392,7 @@ class Cajero:
         print(filas)
 
         return invoice
+
     def clear_cart(self):
         self.carrito.delete(*self.carrito.get_children())
         self.root.config(bg=color_terciario)
@@ -2399,33 +2403,35 @@ class Cajero:
     def show_pending_orders(self):
         if self.carrito.get_children():
             answer = messagebox.askyesno(
-                "Confirmación", "¿Deseas crear una factura para los pedidos pendientes?"
+                "Confirmation", "Do you want to create an invoice for pending orders?"
             )
             if answer:
                 payment_method = ""
                 payment_answer = messagebox.askyesno(
-                    "Método de pago", "¿El pago se realizará en efectivo (en línea)?"
+                    "Payment Method", "Will the payment be in cash (online)?"
                 )
                 if payment_answer:
-                    payment_method = "en línea"
+                    payment_method = "online"
                 else:
                     payment_method = "caja"
 
                 invoice = self.create_invoice(payment_method)
                 pending_orders.append(invoice)
-                messagebox.showinfo("Pedidos pendientes", invoice)
+                messagebox.showinfo("Pending Orders", invoice)
                 self.clear_cart()
 
         else:
-            messagebox.showinfo("No hay pedidos pendientes", "No hay pedidos pendientes.")
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     def view_pending_orders(self):
         if pending_orders:
             orders = "\n".join(pending_orders)
-            messagebox.showinfo("Pedidos pendientes", orders)
+            messagebox.showinfo("Pending Orders", orders)
             self.actualizar_tabla(self.root)
         else:
-            messagebox.showinfo("No hay pedidos pendientes", "No hay pedidos pendientes.")
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     # ----- Pedidos pendientes
     def actualizar_tabla(self, root):
@@ -2502,7 +2508,7 @@ class Cajero:
         # Obtener el número de filas actuales
         num_filas_actuales = len(filas)
 
-        # Botón "Volver al menú"
+        # Botón "volver menu"
         btn_volver_menu = ttk.Button(
             root, text="Volver al menú", command=lambda: self.remover_ver_pedidos()
         )
@@ -2533,16 +2539,18 @@ class Cajero:
 
     def ver_detalles(self, detalles):
         # Imprimir los detalles del pedido
-        messagebox.showinfo("Pedidos pendientes", detalles)
+        messagebox.showinfo("Pending Orders", detalles)
 
-    # ------ Pedidos para entregar
+    # ------ pedidos para entregar
     def view_entregar_orders(self):
         if pending_orders:
             orders = "\n".join(pending_orders)
-            messagebox.showinfo("Pedidos pendientes", orders)
+            messagebox.showinfo("Pending Orders", orders)
+
             self.actualizar_tabla2(self.root)
         else:
-            messagebox.showinfo("No hay pedidos pendientes", "No hay pedidos pendientes.")
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     def actualizar_tabla2(self, root):
         # Eliminar todos los widgets de la ventana
@@ -2603,7 +2611,7 @@ class Cajero:
 
             btn_aceptar = ttk.Button(
                 seccion_pedido,
-                text="Entregar Pedido",
+                text="Entregar pedido",
                 command=lambda fila=fila: self.aceptar_pedido2(fila),
             )
 
@@ -2612,16 +2620,16 @@ class Cajero:
         # Obtener el número de filas actuales
         num_filas_actuales = len(filas)
 
-        # Botón "Volver al menú"
+        # Botón "volver menu"
         btn_volver_menu = ttk.Button(
-            root, text="Volver al menú", command=lambda: self.remover_ver_pedidos()
+            root, text="Volver al menu", command=lambda: self.remover_ver_pedidos()
         )
         btn_volver_menu.grid(
             row=num_filas_actuales + 2, column=0, columnspan=6, padx=5, pady=5
         )
 
     def aceptar_pedido2(self, fila):
-        print(fila, "Hola aquí es")
+        print(fila, "hola aqui es")
         # Lógica para aceptar el pedido
         facturas.append(
             fila
@@ -2637,7 +2645,7 @@ class Cajero:
 
     def ver_detalles2(self, detalles):
         # Imprimir los detalles del pedido
-        messagebox.showinfo("Pedidos pendientes", detalles)
+        messagebox.showinfo("Pending Orders", detalles)
 
     def remover_ver_pedidos(self):
         self.Ventana_principal(None)
@@ -2760,25 +2768,25 @@ class Usuario:
         self.current_category = category
         self.selected_category_label.configure(text=category)
 
-        # Destruir los widgets existentes en el marco de productos
+        # Destroy existing widgets in the product frame
         for widget in self.product_frame.winfo_children():
             widget.destroy()
 
-        # Crear un lienzo para el marco de productos
+        # Create a canvas for the product frame
         canvas = tk.Canvas(self.product_frame)
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        # Crear una barra de desplazamiento para el lienzo
+        # Create a scrollbar for the canvas
         scrollbar = ttk.Scrollbar(self.product_frame, orient=tk.VERTICAL, command=canvas.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        # Configurar el lienzo para utilizar la barra de desplazamiento
+        # Configure the canvas to use the scrollbar
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Crear un marco dentro del lienzo para contener los productos
+        # Create a frame inside the canvas to hold the products
         inner_frame = ttk.Frame(canvas)
 
-        # Agregar el marco interno al lienzo
+        # Add the inner frame to the canvas
         canvas.create_window((0, 0), window=inner_frame, anchor=tk.NW)
 
         products = categories[category]
@@ -2798,27 +2806,27 @@ class Usuario:
             description_label.pack(padx=10, pady=5, anchor="w")
 
             price_label = ttk.Label(
-                inner_frame, text="Precio: " + product["price"])
+                inner_frame, text="Price: " + product["price"])
             price_label.pack(padx=10, pady=5, anchor="w")
 
             buy_button = ttk.Button(
                 inner_frame,
-                text="Comprar",
+                text="Buy",
                 command=lambda p=product: self.show_details(p),
             )
             buy_button.pack(padx=10, pady=5)
 
-        # Actualizar la región de desplazamiento del lienzo
+        # Update the scroll region of the canvas
         canvas.update_idletasks()
         canvas.configure(scrollregion=canvas.bbox("all"))
 
-        # Mostrar el marco de productos y ocultar el marco de categorías
+        # Show the product frame and hide the category frame
         self.product_frame.pack()
         self.category_frame.pack_forget()
 
         back_button = ttk.Button(
             self.product_frame,
-            text="Volver al menú principal",
+            text="Back to main menu",
             command=lambda:self.show_categories(canvas),
             width=30
         )
@@ -2833,8 +2841,8 @@ class Usuario:
 
         title_label = ttk.Label(
             self.details_frame,
-            text="Título: " + product["title"] +
-            " - Precio: " + product["price"],
+            text="Title: " + product["title"] +
+            " - Price: " + product["price"],
         )
         title_label.pack(padx=10, pady=5, anchor="w")
 
@@ -2845,47 +2853,38 @@ class Usuario:
         image_label.image = photo
         image_label.pack(padx=10, pady=5)
 
-        quantity_label = ttk.Label(self.details_frame, text="Cantidad:")
+        quantity_label = ttk.Label(self.details_frame, text="Quantity:")
         quantity_label.pack(padx=10, pady=5, anchor="w")
 
         quantity_spinbox = ttk.Spinbox(self.details_frame, from_=1, to=10)
         quantity_spinbox.pack(padx=10, pady=5, anchor="w")
 
-        flavor1_label = ttk.Label(self.details_frame, text="Sabor 1:")
+        flavor1_label = ttk.Label(self.details_frame, text="Flavor 1:")
         flavor1_label.pack(padx=10, pady=5, anchor="w")
 
         flavor_combobox1 = ttk.Combobox(
             self.details_frame, values=[
-                sabores[0], sabores[1], sabores[2], sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-                sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-                sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
         )
         flavor_combobox1.pack(padx=10, pady=5, anchor="w")
 
-        flavor2_label = ttk.Label(self.details_frame, text="Sabor 2:")
-        flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
-        flavor_combobox2 = ttk.Combobox(
-            self.details_frame, values=[
-            sabores[0], sabores[1], sabores[2], sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-            sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-            sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
-        )
-        flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
-        flavor_combobox3 = None
-        flavor3_label = None
-        flavor3_label = ttk.Label(self.details_frame, text="Sabor 3:")
-        flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
-        flavor_combobox3 = ttk.Combobox(
-            self.details_frame, values=[
-            sabores[0], sabores[1], sabores[2], sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
-            sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
-            sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
-        )
-        flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
+        if product["title"] == "Product 2" and self.current_category == "Category 1":
+            flavor2_label = ttk.Label(self.details_frame, text="Flavor 2:")
+            flavor2_label.pack(padx=10, pady=5, anchor="w")
+
+            flavor_combobox2 = ttk.Combobox(
+                self.details_frame, values=[
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
+            )
+            flavor_combobox2.pack(padx=10, pady=5, anchor="w")
 
         add_to_cart_button = ttk.Button(
             self.details_frame,
-            text="Agregar al carrito",
+            text="Add to cart",
             command=lambda: self.add_to_cart(
                 product,
                 quantity_spinbox.get(),
@@ -2896,35 +2895,35 @@ class Usuario:
         add_to_cart_button.pack(padx=10, pady=5, anchor="w")
 
         back_button = ttk.Button(
-            self.details_frame, text="Volver al menú", command=self.show_categories
+            self.details_frame, text="Back to menu", command=self.show_categories
         )
         back_button.pack(padx=10, pady=5, anchor="e")
 
     def add_to_cart(self, product, quantity, flavor1, flavor2=None, flavor3=None):
         if not quantity.isdigit() or int(quantity) == 0:
-            messagebox.showerror("Error", "Por favor, selecciona una cantidad válida.")
+            messagebox.showerror("Error", "Please select a valid quantity.")
         elif flavor1 == "":
-            messagebox.showerror("Error", "Por favor, selecciona un sabor.")
+            messagebox.showerror("Error", "Please select a flavor.")
         else:
             product_title = product["title"]
             if product_title in productos_dobles:
                 if flavor2 is None or flavor2 == "":
                     messagebox.showerror(
-                        "Error", "Por favor, selecciona un segundo sabor para el Producto 2.")
+                        "Error", "Please select a second flavor for Product 2.")
                     return
                 self.products.append(
                     (product_title, quantity, flavor1, flavor2))
             elif product_title in productos_Triples:
                 if flavor3 is None or flavor3 == "":
                     messagebox.showerror(
-                        "Error", "Por favor, selecciona un tercer sabor.")
+                        "Error", "Please select a third flavor ")
                     return
                 self.products.append(
                     (product_title, quantity, flavor1, flavor2, flavor3))
             else:
                 self.products.append((product_title, quantity, flavor1))
 
-            messagebox.showinfo("Éxito", "¡Producto agregado al carrito!")
+            messagebox.showinfo("Success", "Product added to cart!")
             self.show_categories()
             self.carrito_compras()
 
@@ -2973,7 +2972,7 @@ class Usuario:
             self.total_textbox.insert(0, total)
             self.total_textbox.configure(state="readonly")
         else:
-            messagebox.showerror("Error", "Por favor, selecciona un producto para eliminar.")
+            messagebox.showerror("Error", "Please select a product to remove.")
 
     def calculate_total(self):
         total = 0
@@ -2986,7 +2985,7 @@ class Usuario:
 
     def show_categories(self, canvas=None):
         self.current_category = None
-        if canvas != None:
+        if canvas!=None:
             canvas.destroy()
         if self.details_frame:
             self.details_frame.pack_forget()
@@ -3012,87 +3011,25 @@ class Usuario:
             label="Modificar Usuario",
             command=lambda usuario=self.usuario: self.editar_usuario(usuario),
         )
-        compra.add_command(label="Compra en Línea", command=self.Ventana_principal)
+        compra.add_command(label="Compra en Linea",
+                           command=self.Ventana_principal)
         pedido.add_command(label="Pedidos", command=self.view_pending_orders)
         barra.add_cascade(label="Usuario", menu=usuario_menu)
         barra.add_cascade(label="Comprar", menu=compra)
         barra.add_cascade(label="Pedidos", menu=pedido)
         # Crear un botón de regresar
-        back_button = ttk.Button(
-            self.root, text="Volver al menú", command=self.show_categories
+        image = Image.open("BotonVolver.png")
+        nuevo_tamaño = (40, 40)
+        imagen_nueva = image.resize(nuevo_tamaño)
+        background_image = ImageTk.PhotoImage(imagen_nueva)
+        button_regresar = tk.Button(
+            self.root,
+            image=background_image,
+            command=lambda: self.volver(),
+            bg=color_terciario,
         )
-        back_button.pack(padx=10, pady=5, anchor="e")
-
-    def editar_usuario(self, usuario):
-        self.category_frame.pack_forget()
-        self.product_frame.pack_forget()
-        self.details_frame.pack_forget()
-
-        self.usuario_frame = ttk.Frame(self.root)
-        self.usuario_frame.pack(padx=20, pady=10)
-
-        # Crear etiquetas y campos de entrada para la modificación de datos de usuario
-        nombre_label = ttk.Label(self.usuario_frame, text="Nombre:")
-        nombre_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
-        nombre_entry = ttk.Entry(self.usuario_frame, textvariable=self.usuario["nombre"])
-        nombre_entry.grid(row=0, column=1, padx=10, pady=5)
-
-        direccion_label = ttk.Label(self.usuario_frame, text="Dirección:")
-        direccion_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
-        direccion_entry = ttk.Entry(self.usuario_frame, textvariable=self.usuario["direccion"])
-        direccion_entry.grid(row=1, column=1, padx=10, pady=5)
-
-        telefono_label = ttk.Label(self.usuario_frame, text="Teléfono:")
-        telefono_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
-        telefono_entry = ttk.Entry(self.usuario_frame, textvariable=self.usuario["telefono"])
-        telefono_entry.grid(row=2, column=1, padx=10, pady=5)
-
-        # Crear un botón para guardar los cambios
-        guardar_button = ttk.Button(
-            self.usuario_frame,
-            text="Guardar",
-            command=lambda: self.save_user_changes(
-                nombre_entry.get(), direccion_entry.get(), telefono_entry.get()
-            ),
-        )
-        guardar_button.grid(row=3, column=0, padx=10, pady=5, sticky="e")
-
-    def save_user_changes(self, nombre, direccion, telefono):
-        self.usuario["nombre"].set(nombre)
-        self.usuario["direccion"].set(direccion)
-        self.usuario["telefono"].set(telefono)
-        messagebox.showinfo("Éxito", "Los cambios se han guardado correctamente.")
-
-    def view_pending_orders(self):
-        self.category_frame.pack_forget()
-        self.product_frame.pack_forget()
-        self.details_frame.pack_forget()
-
-        self.orders_frame = ttk.Frame(self.root)
-        self.orders_frame.pack(padx=20, pady=10)
-
-        # Crear un árbol para mostrar los pedidos pendientes
-        self.orders_treeview = ttk.Treeview(
-            self.orders_frame,
-            columns=("cantidad", "total"),
-            show="headings",
-            selectmode="browse",
-        )
-        self.orders_treeview.heading("cantidad", text="Cantidad")
-        self.orders_treeview.heading("total", text="Total")
-        self.orders_treeview.column("cantidad", width=100)
-        self.orders_treeview.column("total", width=100)
-        self.orders_treeview.pack()
-
-        # Agregar los pedidos pendientes al árbol
-        for order in self.pending_orders:
-            self.orders_treeview.insert("", "end", values=(order["cantidad"], order["total"]))
-
-        # Crear un botón para volver al menú
-        back_button = ttk.Button(
-            self.orders_frame, text="Volver al menú", command=self.show_categories
-        )
-        back_button.pack(padx=10, pady=5, anchor="e")
+        button_regresar.image = background_image
+        button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
 
     def volver_inicio_sesion(self):
         for widget in self.root.winfo_children():
@@ -3102,15 +3039,18 @@ class Usuario:
     def show_pending_orders(self):
         if self.carrito_treeview.get_children():
             answer = messagebox.askyesno(
-                "Confirmación", "¿Deseas crear una factura para los pedidos pendientes?"
+                "Confirmation", "Do you want to create an invoice for pending orders?"
             )
             if answer:
-                factura = self.create_invoice(self.metodoPago)
-                pending_orders.append(factura)
-                messagebox.showinfo("Pedidos Pendientes", factura)
+                
+
+                invoice = self.create_invoice(self.metodoPago)
+                pending_orders.append(invoice)
+                messagebox.showinfo("Pending Orders", invoice)
                 self.clear_cart()
         else:
-            messagebox.showinfo("Sin Pedidos Pendientes", "No hay pedidos pendientes.")
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     def clear_cart(self):
         self.carrito_treeview.delete(*self.carrito_treeview.get_children())
@@ -3119,9 +3059,9 @@ class Usuario:
         self.total_textbox.delete(0, "end")
         self.total_textbox.configure(state="readonly")
 
-    def create_invoice(self, metodo_pago):
+    def create_invoice(self, paymenth_method):
         filas_adicionales = []
-        factura = ""
+        invoice = ""
         total = 0
         Producto_Factura_Individual = []
         Producto_Factura_Conjunta = []
@@ -3140,41 +3080,43 @@ class Usuario:
             Producto_Factura_Individual.append(total_price)
             Producto_Factura_Conjunta.append(Producto_Factura_Individual)
             total += total_price
-            factura += f"Producto: {product_title}\n"
-            factura += f"Sabores: {flavors}\n"
-            factura += f"Cantidad: {quantity}\n"
-            factura += f"Precio Total: {total_price}\n"
-            factura += "------------------------\n"
-            producto = {"tamaño": product_title, "sabor": flavors, "precio": total_price}
+            invoice += f"Product: {product_title}\n"
+            invoice += f"Flavors: {flavors}\n"
+            invoice += f"Quantity: {quantity}\n"
+            invoice += f"Total Price: {total_price}\n"
+            invoice += "------------------------\n"
+            producto = {"tamaño": product_title,
+                        "sabor": flavors, "precio": total_price}
             productos.append(producto)
-        factura += f"Total: {total}\n"
+        invoice += f"Total: {total}\n"
         Producto_Factura_Conjunta_Filtro.append(Producto_Factura_Conjunta[0])
         Producto_Factura_Total.append(Producto_Factura_Conjunta_Filtro)
         Producto_Factura_Total.append(total)
 
         print(Producto_Factura_Total, "aquí es")
-        lista.append(factura)
+        lista.append(invoice)
         print(lista)
 
-        filas_adicionales.append(len(facturas) + 1)
+        filas_adicionales.append(len(facturas)+1)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
         filas_adicionales.append(productos)
-        filas_adicionales.append(metodo_pago)
+        filas_adicionales.append(paymenth_method)
         filas_adicionales.append({"Total": total})
-        print(filas_adicionales)
+        print(filas_adicionales) 
         filas.append(filas_adicionales)
         print(filas)
 
-        return factura
+        return invoice
 
     def view_pending_orders(self):
         if pending_orders:
             orders = "\n".join(pending_orders)
-            messagebox.showinfo("Pedidos Pendientes", orders)
+            messagebox.showinfo("Pending Orders", orders)
             self.actualizar_tabla(self.root)
         else:
-            messagebox.showinfo("Sin Pedidos Pendientes", "No hay pedidos pendientes.")
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     # ----- Pedidos pendientes
     def actualizar_tabla(self, root):
@@ -3194,7 +3136,7 @@ class Usuario:
             "Total",
             "Cancelar Pedido",
         ]
-
+        
         # Crear un contenedor para los títulos
         titulo_frame = ttk.Frame(root)
         titulo_frame.pack()
@@ -3212,15 +3154,14 @@ class Usuario:
                 if j == 3:
                     detalles = ""
                     for obj in valor:
-                        detalles += f"Tamaño: {obj['tamaño']}\n"
-                        detalles += f"Sabor: {obj['sabor']}\n"
-                        detalles += f"Precio: {obj['precio']}\n"
+                        detalles += f"tamaño: {obj['tamaño']}\n"
+                        detalles += f"sabor: {obj['sabor']}\n"
+                        detalles += f"precio: {obj['precio']}\n"
                     btn_detalles = ttk.Button(
                         fila_frame,
                         text="Detalles",
                         command=lambda detalles=detalles: messagebox.showinfo(
-                            "Detalles", detalles
-                        ),
+                            "Detalles", detalles),
                         style="TButton",
                     )
                     btn_detalles.pack(side="left", padx=5, pady=5)
@@ -3228,9 +3169,7 @@ class Usuario:
                     if isinstance(valor, dict):
                         valor_dict = dict(valor)
                         value = valor_dict.get("Total", "")
-                        label = ttk.Label(
-                            fila_frame, text=value, background=color_terciario
-                        )
+                        label = ttk.Label(fila_frame, text=value, background=color_terciario)
                         label.pack(side="left", padx=5, pady=5)
                 else:
                     if isinstance(valor, dict):
@@ -3238,9 +3177,7 @@ class Usuario:
                             valor = valor.get("tamaño", "")
                         elif j == 5:
                             valor = valor.get("precio", "")
-                    label = ttk.Label(
-                        fila_frame, text=valor, background=color_terciario
-                    )
+                    label = ttk.Label(fila_frame, text=valor, background=color_terciario)
                     label.pack(side="left", padx=5, pady=5)
 
             # Crear botones de pedido
@@ -3270,6 +3207,7 @@ class Usuario:
         style.configure("TButton.TLabel", background=color_principal)
 
 
+
     def aceptar_pedido(self, fila):
         # Lógica para aceptar el pedido
         pedidos_aceptados.append(
@@ -3283,7 +3221,6 @@ class Usuario:
         print(pedidos_aceptados)
         self.actualizar_tabla(self.root)
 
-
     def cancelar_pedido(self, fila):
         # Lógica para cancelar el pedido
         filas.remove(fila)  # Remover la fila de la lista de filas
@@ -3296,11 +3233,20 @@ class Usuario:
         print("Pedido cancelado")
         self.actualizar_tabla(self.root)
 
-
     def ver_detalles(self, detalles):
         # Imprimir los detalles del pedido
         messagebox.showinfo("Pending Orders", detalles)
 
+    # ------ pedidos para entregar
+    def view_entregar_orders(self):
+        if pending_orders:
+            orders = "\n".join(pending_orders)
+            messagebox.showinfo("Pending Orders", orders)
+
+            self.actualizar_tabla2(self.root)
+        else:
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     def actualizar_tabla2(self, root):
         # Eliminar todos los widgets de la ventana
@@ -3321,7 +3267,8 @@ class Usuario:
                     btn_detalles = ttk.Button(
                         root,
                         text="Detalles",
-                        command=lambda detalles=valor: self.ver_detalles2(detalles),
+                        command=lambda detalles=valor: self.ver_detalles2(
+                            detalles),
                     )
                     btn_detalles.grid(row=i + 1, column=j, padx=5, pady=5)
                 else:
@@ -3330,7 +3277,8 @@ class Usuario:
 
             # Crear botones de pedido
             seccion_pedido = ttk.Frame(root)
-            seccion_pedido.grid(row=i + 1, column=4, columnspan=2, padx=5, pady=5)
+            seccion_pedido.grid(row=i + 1, column=4,
+                                columnspan=2, padx=5, pady=5)
 
             btn_aceptar = ttk.Button(
                 seccion_pedido,
@@ -3351,7 +3299,6 @@ class Usuario:
             row=num_filas_actuales + 1, column=0, columnspan=6, padx=5, pady=5
         )
 
-
     def aceptar_pedido2(self, fila):
         # Lógica para aceptar el pedido
         facturas.append(
@@ -3366,16 +3313,12 @@ class Usuario:
         print(facturas)
         self.actualizar_tabla(self.root)
 
-
     def ver_detalles2(self, detalles):
         # Imprimir los detalles del pedido
         messagebox.showinfo("Pending Orders", detalles)
 
-
     def remover_ver_pedidos(self):
-        # Remover la tabla de pedidos pendientes
-        self.root.config(bg=color_secundario)
-        self.actualizar_tabla(self.root)
+        self.Ventana_principal()
 
     def Ventana_Usuario(self, usuario1):
         self.usuario = usuario1
