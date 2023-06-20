@@ -2649,6 +2649,7 @@ class Usuario:
     def __init__(self, root):
         self.root = root
         self.usuario = None
+        self.metodoPago=""
         self.products = []
         # Configure the cart
         self.carrito_treeview = ttk.Treeview(
@@ -2729,13 +2730,33 @@ class Usuario:
         total_label.pack(side=tk.TOP, padx=10, pady=5, anchor="e")
         self.total_textbox = ttk.Entry(self.carrito_frame, state="readonly")
         self.total_textbox.pack(side=tk.TOP, padx=10, pady=5, anchor="w")
+
+        # Create the combobox for payment method
+        metodo_pago_label = ttk.Label(self.carrito_frame, text="Método de Pago:")
+        metodo_pago_label.pack(side=tk.TOP, padx=10, pady=5, anchor="w")
+        self.metodo_pago_combobox = ttk.Combobox(
+            self.carrito_frame,
+            values=["Caja", "Online", "OnlineCaja"]
+        )
+        self.metodo_pago_combobox.pack(side=tk.TOP, padx=10, pady=5, anchor="w")
+
         realizar_compra_button = ttk.Button(
             self.carrito_frame,
             text="Realizar compra",
-            command=self.show_pending_orders
+            command=self.checkout
         )
         realizar_compra_button.pack(side=tk.TOP, padx=10, pady=5)
 
+    def checkout(self):
+        metodo_pago = self.metodo_pago_combobox.get()
+        if metodo_pago:
+            self.metodoPago = metodo_pago
+            self.show_pending_orders()
+        else:
+            messagebox.showinfo("Error", "Debes seleccionar un método de pago.")
+
+        
+        
     def show_category(self, category):
         self.root.config(bg=color_terciario)
         self.current_category = category
@@ -3006,17 +3027,9 @@ class Usuario:
                 "Confirmation", "Do you want to create an invoice for pending orders?"
             )
             if answer:
-                payment_method = ""
-                payment_answer = messagebox.askyesno(
-                    "Payment Method", "Will the payment be in cash (caja)?"
-                )
-                if payment_answer:
-                    payment_method = "caja"
-                else:
-                    payment_method = "online"
-
-                invoice = self.create_invoice(payment_method)
                 
+
+                invoice = self.create_invoice(self.metodoPago)
                 pending_orders.append(invoice)
                 messagebox.showinfo("Pending Orders", invoice)
                 self.clear_cart()
@@ -3177,7 +3190,7 @@ class Usuario:
         # Establecer colores a los botones
         style = ttk.Style()
         style.configure("TButton", background=color_secundario)
-        style.configure("TButton.TLabel", background=color_primario)
+        style.configure("TButton.TLabel", background=color_principal)
 
 
 
