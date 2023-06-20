@@ -1743,31 +1743,37 @@ class Admin:
         titulo_label = tk.Label(frame, text="Buscar facturas por cajero", font=("Arial", 16, "bold"), bg=color_terciario)
         titulo_label.pack(pady=10)
 
-        # Crear el Label y Entry para ingresar el usuario del cajero
-        usuario_label = tk.Label(frame, text="Ingresa el usuario del cajero:", font=("Arial", 12, "bold"), bg=color_terciario)
+        # Crear el Label y el Combobox para seleccionar el usuario del cajero
+        usuario_label = tk.Label(frame, text="Selecciona el usuario del cajero:", font=("Arial", 12, "bold"), bg=color_terciario)
         usuario_label.pack(side=tk.LEFT, padx=10, pady=10)
 
-        usuario_entry = tk.Entry(frame)
-        usuario_entry.pack(side=tk.LEFT, padx=10, pady=10)
-        
-        no_existe_label = tk.Label(frame, text="", font=("Arial", 14, "bold"), bg=color_terciario)
+        # Obtener la lista de usuarios cajeros
+        cajeros = [usuario[0] for usuario in usuarios if usuario[2] == "cajero"]
 
+        # Variable para almacenar el usuario seleccionado
+        selected_usuario = tk.StringVar()
+
+        # Crear el Combobox para seleccionar el usuario del cajero
+        usuario_combobox = ttk.Combobox(frame, textvariable=selected_usuario, values=cajeros, state="readonly")
+        usuario_combobox.pack(side=tk.LEFT, padx=10, pady=10)
+        usuario_combobox.current(0)  # Establecer el valor predeterminado
+
+        no_existe_label = tk.Label(frame, text="", font=("Arial", 14, "bold"), bg=color_terciario)
 
         def mostrar_facturas():
             no_existe_label.config(text="")
             no_existe_label.pack_forget()
-            cajero_usuario = usuario_entry.get()
+            cajero_usuario = selected_usuario.get()
 
             cajero_existente = False
             facturas_cajero = []
 
             # Buscar facturas correspondientes al cajero
             for usuario in usuarios:
-                if usuario[0] == cajero_usuario and usuario[2] == "cajero":
+                if usuario[0] == cajero_usuario:
                     cajero_existente = True
-                    cajero_correo = usuario[1]
                     for factura in facturas:
-                        if factura[4] == cajero_correo:  # Corregir la posición a [4]
+                        if factura[1] == cajero_usuario:
                             facturas_cajero.append(factura)
                     break
 
@@ -1832,7 +1838,7 @@ class Admin:
 
             else:
                 no_existe_label.config(text="El cajero no existe")
-                no_existe_label.pack(padx=20, pady=20,anchor="center")
+                no_existe_label.pack(padx=20, pady=20, anchor="center")
 
         # Crear un botón para mostrar las facturas del cajero
         mostrar_button = tk.Button(frame, text="Mostrar Facturas", bg=color_secundario, command=mostrar_facturas)
@@ -1843,8 +1849,7 @@ class Admin:
         frame.config(bg=color_terciario)
         titulo_label.config(bg=color_terciario)
         usuario_label.config(bg=color_terciario)
-        usuario_entry.config(bg="white")
-        mostrar_button.config(bg=color_secundario)
+        usuario_combobox.config(style="TCombobox")
 
 
 
@@ -2909,7 +2914,7 @@ class Usuario:
                     return
                 self.products.append(
                     (product_title, quantity, flavor1, flavor2))
-            elif product_title in productos_triples:
+            elif product_title in productos_Triples:
                 if flavor3 is None or flavor3 == "":
                     messagebox.showerror(
                         "Error", "Por favor, selecciona un tercer sabor.")
@@ -2969,6 +2974,15 @@ class Usuario:
             self.total_textbox.configure(state="readonly")
         else:
             messagebox.showerror("Error", "Por favor, selecciona un producto para eliminar.")
+
+    def calculate_total(self):
+        total = 0
+        for product in self.products:
+            product_title = product[0]
+            quantity = int(product[1])
+            price = self.get_product_price(product_title)
+            total += quantity * price
+        return total
 
     def show_categories(self, canvas=None):
         self.current_category = None
