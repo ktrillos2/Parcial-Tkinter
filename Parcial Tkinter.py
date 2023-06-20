@@ -1999,44 +1999,64 @@ class Cajero:
             widget.destroy()
 
         products = categories[category]
+
+        # Create a canvas for the product frame
+        canvas = tk.Canvas(self.product_frame, width=600)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Create a scrollbar for the canvas (vertical)
+        scrollbar_y = ttk.Scrollbar(self.product_frame, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Create a scrollbar for the canvas (horizontal)
+        scrollbar_x = ttk.Scrollbar(self.product_frame, orient=tk.HORIZONTAL, command=canvas.xview)
+        scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
+
+        # Configure the canvas to use the scrollbars
+        canvas.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
+        canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        # Create a frame to contain the product widgets
+        product_frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=product_frame, anchor="nw")
+
         for i, product in enumerate(products):
-            title_label = ttk.Label(self.product_frame, text=product["title"])
+            title_label = ttk.Label(product_frame, text=product["title"])
             title_label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
 
             image = Image.open(product["image_path"])
             image = image.resize((100, 100), Image.ANTIALIAS)
             photo = ImageTk.PhotoImage(image)
-            image_label = ttk.Label(self.product_frame, image=photo)
+            image_label = ttk.Label(product_frame, image=photo)
             image_label.image = photo
             image_label.grid(row=i, column=1, padx=10, pady=5)
 
-            description_label = ttk.Label(
-                self.product_frame, text=product["description"])
-            description_label.grid(
-                row=i, column=2, padx=10, pady=5, sticky="w")
+            description_label = ttk.Label(product_frame, text=product["description"])
+            description_label.grid(row=i, column=2, padx=10, pady=5, sticky="w")
 
-            price_label = ttk.Label(
-                self.product_frame, text="Price: " + product["price"])
+            price_label = ttk.Label(product_frame, text="Price: " + product["price"])
             price_label.grid(row=i, column=3, padx=10, pady=5, sticky="w")
 
             buy_button = ttk.Button(
-                self.product_frame,
+                product_frame,
                 text="Buy",
                 command=lambda p=product: self.show_details(p),
             )
             buy_button.grid(row=i, column=4, padx=10, pady=5)
 
+        # Bind the scrollbars to the canvas
+        canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(int(-1 * (e.delta / 120)), "units"))
+        canvas.bind("<Shift-MouseWheel>", lambda e: canvas.xview_scroll(int(-1 * (e.delta / 120)), "units"))
+
         self.product_frame.grid()
         self.category_frame.grid_remove()
 
         back_button = ttk.Button(
-            self.product_frame,
+            product_frame,
             text="Back to main menu",
             command=self.show_categories,
         )
-        back_button.grid(
-            row=i + 1, column=0, columnspan=3, padx=10, pady=5, sticky="w"
-        )
+        back_button.grid(row=i + 1, column=0, columnspan=3, padx=10, pady=5, sticky="w")
 
     def show_details(self, product):
         self.category_frame.grid_forget()
@@ -2062,7 +2082,10 @@ class Cajero:
         flavor1_label = ttk.Label(self.details_frame, text="Flavor 1:")
         flavor1_label.grid(row=3, column=0, padx=10, pady=5, sticky="w")
         flavor_combobox1 = ttk.Combobox(
-            self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"]
+            self.details_frame, values=[
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
         )
         flavor_combobox1.grid(row=3, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox2 = None
@@ -2072,7 +2095,9 @@ class Cajero:
             flavor2_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
             flavor_combobox2 = ttk.Combobox(
                 self.details_frame, values=[
-                    "Vanilla", "Chocolate", "Strawberry"]
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
             )
             flavor_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         flavor_combobox3 = None
@@ -2082,7 +2107,9 @@ class Cajero:
             flavor3_label.grid(row=5, column=0, padx=10, pady=5, sticky="w")
             flavor_combobox3 = ttk.Combobox(
                 self.details_frame, values=[
-                    "Vanilla", "Chocolate", "Strawberry"]
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
             )
             flavor_combobox3.grid(row=5, column=1, padx=10, pady=5, sticky="w")
         add_to_cart_button = ttk.Button(
@@ -2714,36 +2741,59 @@ class Usuario:
         self.current_category = category
         self.selected_category_label.configure(text=category)
 
+        # Destroy existing widgets in the product frame
         for widget in self.product_frame.winfo_children():
             widget.destroy()
 
+        # Create a canvas for the product frame
+        canvas = tk.Canvas(self.product_frame)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Create a scrollbar for the canvas
+        scrollbar = ttk.Scrollbar(self.product_frame, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Configure the canvas to use the scrollbar
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Create a frame inside the canvas to hold the products
+        inner_frame = ttk.Frame(canvas)
+
+        # Add the inner frame to the canvas
+        canvas.create_window((0, 0), window=inner_frame, anchor=tk.NW)
+
         products = categories[category]
         for i, product in enumerate(products):
-            title_label = ttk.Label(self.product_frame, text=product["title"])
+            title_label = ttk.Label(inner_frame, text=product["title"])
             title_label.pack(padx=10, pady=5, anchor="w")
 
             image = Image.open(product["image_path"])
             image = image.resize((100, 100), Image.ANTIALIAS)
             photo = ImageTk.PhotoImage(image)
-            image_label = ttk.Label(self.product_frame, image=photo)
+            image_label = ttk.Label(inner_frame, image=photo)
             image_label.image = photo
             image_label.pack(padx=10, pady=5)
 
             description_label = ttk.Label(
-                self.product_frame, text=product["description"])
+                inner_frame, text=product["description"])
             description_label.pack(padx=10, pady=5, anchor="w")
 
             price_label = ttk.Label(
-                self.product_frame, text="Price: " + product["price"])
+                inner_frame, text="Price: " + product["price"])
             price_label.pack(padx=10, pady=5, anchor="w")
 
             buy_button = ttk.Button(
-                self.product_frame,
+                inner_frame,
                 text="Buy",
                 command=lambda p=product: self.show_details(p),
             )
             buy_button.pack(padx=10, pady=5)
 
+        # Update the scroll region of the canvas
+        canvas.update_idletasks()
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+        # Show the product frame and hide the category frame
         self.product_frame.pack()
         self.category_frame.pack_forget()
 
@@ -2751,8 +2801,9 @@ class Usuario:
             self.product_frame,
             text="Back to main menu",
             command=self.show_categories,
+            width=30
         )
-        back_button.pack(padx=10, pady=5, anchor="w")
+        back_button.pack(padx=8, pady=5, anchor="w")
 
     def show_details(self, product):
         self.category_frame.pack_forget()
@@ -2785,7 +2836,10 @@ class Usuario:
         flavor1_label.pack(padx=10, pady=5, anchor="w")
 
         flavor_combobox1 = ttk.Combobox(
-            self.details_frame, values=["Vanilla", "Chocolate", "Strawberry"]
+            self.details_frame, values=[
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
         )
         flavor_combobox1.pack(padx=10, pady=5, anchor="w")
 
@@ -2795,7 +2849,9 @@ class Usuario:
 
             flavor_combobox2 = ttk.Combobox(
                 self.details_frame, values=[
-                    "Vanilla", "Chocolate", "Strawberry"]
+                   sabores[0], sabores[1], sabores[2],sabores[3], sabores[4], sabores[5], sabores[6], sabores[7],
+                   sabores[8], sabores[9], sabores[10], sabores[11], sabores[12], sabores[13], sabores[14], sabores[15],
+                   sabores[16], sabores[17], sabores[18], sabores[19], sabores[20]]
             )
             flavor_combobox2.pack(padx=10, pady=5, anchor="w")
 
@@ -2944,23 +3000,27 @@ class Usuario:
         self.mostrar_ventana_inicio_sesion()
 
     def show_pending_orders(self):
-        answer = messagebox.askyesno(
-            "Confirmation", "Do you want to create an invoice for pending orders?"
-        )
-        if answer:
-            payment_method = ""
-            payment_answer = messagebox.askyesno(
-                "Payment Method", "Will the payment be in cash (caja)?"
+        if self.carrito_treeview.get_children():
+            answer = messagebox.askyesno(
+                "Confirmation", "Do you want to create an invoice for pending orders?"
             )
-            if payment_answer:
-                payment_method = "caja"
-            else:
-                payment_method = "online"
+            if answer:
+                payment_method = ""
+                payment_answer = messagebox.askyesno(
+                    "Payment Method", "Will the payment be in cash (caja)?"
+                )
+                if payment_answer:
+                    payment_method = "caja"
+                else:
+                    payment_method = "online"
 
-            invoice = self.create_invoice(payment_method)
-            pending_orders.append(invoice)
-            messagebox.showinfo("Pending Orders", invoice)
-            self.clear_cart()
+                invoice = self.create_invoice(payment_method)
+                pending_orders.append(invoice)
+                messagebox.showinfo("Pending Orders", invoice)
+                self.clear_cart()
+        else:
+            messagebox.showinfo("No Pending Orders",
+                                "There are no pending orders.")
 
     def clear_cart(self):
         self.carrito_treeview.delete(*self.carrito_treeview.get_children())
@@ -2969,7 +3029,7 @@ class Usuario:
         self.total_textbox.delete(0, "end")
         self.total_textbox.configure(state="readonly")
 
-    def create_invoice(self, payment_method):
+    def create_invoice(self, paymenth_method):
         filas_adicionales = []
         invoice = ""
         total = 0
@@ -2977,6 +3037,7 @@ class Usuario:
         Producto_Factura_Conjunta = []
         Producto_Factura_Conjunta_Filtro = []
         Producto_Factura_Total = []
+        productos = []
         for item in self.carrito_treeview.get_children():
             product = self.carrito_treeview.item(item)
             product_title = product["text"]
@@ -2994,19 +3055,26 @@ class Usuario:
             invoice += f"Quantity: {quantity}\n"
             invoice += f"Total Price: {total_price}\n"
             invoice += "------------------------\n"
+            producto = {"tamaño": product_title,
+                        "sabor": flavors, "precio": total_price}
+            productos.append(producto)
         invoice += f"Total: {total}\n"
         Producto_Factura_Conjunta_Filtro.append(Producto_Factura_Conjunta[0])
         Producto_Factura_Total.append(Producto_Factura_Conjunta_Filtro)
         Producto_Factura_Total.append(total)
-        # print(Producto_Factura_Conjunta)
-        print(Producto_Factura_Total)
+
+        print(Producto_Factura_Total, "aquí es")
         lista.append(invoice)
         print(lista)
+
+        filas_adicionales.append(18)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
-        filas_adicionales.append(invoice)
-        filas_adicionales.append(total)
+        filas_adicionales.append(productos)
+        filas_adicionales.append(paymenth_method)
+        filas_adicionales.append({"Total": total})
         print(filas_adicionales)
+
         filas.append(filas_adicionales)
         print(filas)
 
@@ -3028,54 +3096,89 @@ class Usuario:
             widget.destroy()
 
         self.herramientas()
+
         # Crear títulos de la tabla
         titulos = [
+            "ID",
             "Correo",
             "Fecha",
             "Detalles",
+            "Tipo de pago",
             "Total",
             "Aceptar Pedido",
             "Cancelar Pedido",
         ]
+        
+        # Crear un contenedor para los títulos
+        titulo_frame = ttk.Frame(root)
+        titulo_frame.pack()
+
         for i, titulo in enumerate(titulos):
-            label = tk.Label(root, text=titulo)
+            label = ttk.Label(titulo_frame, text=titulo, background=color_terciario)
             label.pack(side="left", padx=5, pady=5)
 
         # Crear contenido de la tabla
-        for i, fila in enumerate(filas):
+        for fila in filas:
+            fila_frame = ttk.Frame(root)
+            fila_frame.pack()
+
             for j, valor in enumerate(fila):
-                if j == 2:
+                if j == 3:
+                    detalles = ""
+                    for obj in valor:
+                        detalles += f"tamaño: {obj['tamaño']}\n"
+                        detalles += f"sabor: {obj['sabor']}\n"
+                        detalles += f"precio: {obj['precio']}\n"
                     btn_detalles = ttk.Button(
-                        root,
+                        fila_frame,
                         text="Detalles",
-                        command=lambda detalles=valor: self.ver_detalles(
-                            detalles),
+                        command=lambda detalles=detalles: messagebox.showinfo(
+                            "Detalles", detalles),
+                        style="TButton",
                     )
                     btn_detalles.pack(side="left", padx=5, pady=5)
+                elif j == 5:
+                    if isinstance(valor, dict):
+                        valor_dict = dict(valor)
+                        value = valor_dict.get("Total", "")
+                        label = ttk.Label(fila_frame, text=value, background=color_terciario)
+                        label.pack(side="left", padx=5, pady=5)
                 else:
-                    label = ttk.Label(root, text=valor)
+                    if isinstance(valor, dict):
+                        if j == 4:
+                            valor = valor.get("tamaño", "")
+                        elif j == 5:
+                            valor = valor.get("precio", "")
+                    label = ttk.Label(fila_frame, text=valor, background=color_terciario)
                     label.pack(side="left", padx=5, pady=5)
 
             # Crear botones de pedido
-            seccion_pedido = ttk.Frame(root)
+            seccion_pedido = ttk.Frame(fila_frame)
             seccion_pedido.pack(side="left", padx=5, pady=5)
 
             btn_cancelar = ttk.Button(
                 seccion_pedido,
                 text="Cancelar Pedido",
                 command=lambda fila=fila: self.cancelar_pedido(fila),
+                style="TButton",
             )
-
             btn_cancelar.pack(side="left", padx=5, pady=5)
-
-        # Obtener el número de filas actuales
-        num_filas_actuales = len(filas)
 
         # Botón "volver menu"
         btn_volver_menu = ttk.Button(
-            root, text="Volver al menu", command=lambda: self.remover_ver_pedidos()
+            root,
+            text="Volver al menú",
+            command=lambda: self.remover_ver_pedidos(),
+            style="TButton",
         )
         btn_volver_menu.pack(padx=5, pady=5)
+
+        # Establecer colores a los botones
+        style = ttk.Style()
+        style.configure("TButton", background=color_secundario)
+        style.configure("TButton.TLabel", background=color_primario)
+
+
 
     def aceptar_pedido(self, fila):
         # Lógica para aceptar el pedido
@@ -3226,6 +3329,7 @@ class Usuario:
         )
         button_regresar.image = background_image
         button_regresar.pack(side=tk.TOP, anchor=tk.NW, padx=10, pady=10)
+        self.Ventana_principal()
 
     def volver(self):
         self.root.destroy()  # Destruir la ventana actual
