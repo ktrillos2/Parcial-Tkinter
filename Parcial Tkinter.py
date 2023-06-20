@@ -1951,12 +1951,13 @@ class Cajero:
         )
         realizar_compra_button.grid(row=2, column=1, padx=10, pady=5)
 
-    def show_categories(self):
+    def show_categories(self,canvas=None):
         self.current_category = None
+        if canvas!=None:
+            canvas.destroy()
 
         if self.details_frame:
             self.details_frame.grid_remove()
-
         self.category_frame.grid()
         self.product_frame.grid_remove()
         self.selected_category_label.configure(text="")
@@ -2054,7 +2055,7 @@ class Cajero:
         back_button = ttk.Button(
             product_frame,
             text="Back to main menu",
-            command=self.show_categories,
+            command=lambda:self.show_categories(canvas),
         )
         back_button.grid(row=i + 1, column=0, columnspan=3, padx=10, pady=5, sticky="w")
 
@@ -2197,7 +2198,7 @@ class Cajero:
             table_frame, text="Detalles", font=("Arial", 12, "bold"), bg=color_terciario
         )
         detalles_label.grid(row=1, column=5, columnspan=2,
-                            padx=(20, 10), pady=5, sticky="w")
+                            pad1x=(20, 10), pady=5, sticky="w")
 
         # Mostrar datos de las facturas en la tabla
         for i, factura in enumerate(facturas, start=2):
