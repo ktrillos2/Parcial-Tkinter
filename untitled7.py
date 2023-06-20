@@ -2603,13 +2603,9 @@ class Inicio:
                     Cajero(root).Ventana_principal()
                     break
                 if i[2] == "usuario":
-                    label_status.config(
-                        text="Inicio de sesión exitoso", fg="green", bg=color_terciario
-                    )
                     for widget in root.winfo_children():
                         widget.destroy()
                     self.usuario.Ventana_Usuario(i)
-                    self.usuario.editar_usuario(i)
                     break
         if not encontrado:
             label_status.config(
