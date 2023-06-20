@@ -1376,7 +1376,7 @@ class Admin:
 
                     producto = {
                         "title": title,
-                        "image_path": "./Cono.png",
+                        "image_path": "./noImagen.png",
                         "description": description,
                         "price": price,
                     }
