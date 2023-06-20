@@ -2344,6 +2344,9 @@ class Cajero:
         button_regresar.grid(row=0, column=0)
 
     def create_invoice(self, paymenth_method):
+        # Incrementar el último ID de factura
+        ultimo_id = facturas[-1][0] if facturas else 0
+        nuevo_id = ultimo_id + 1
         filas_adicionales = []
         invoice = ""
         total = 0
@@ -2381,7 +2384,7 @@ class Cajero:
         lista.append(invoice)
         print(lista)
 
-        filas_adicionales.append(len(facturas)+1)
+        filas_adicionales.append(nuevo_id)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
         filas_adicionales.append(productos)
@@ -3060,6 +3063,10 @@ class Usuario:
         self.total_textbox.configure(state="readonly")
 
     def create_invoice(self, paymenth_method):
+
+        # Incrementar el último ID de factura
+        ultimo_id = facturas[-1][0] if facturas else 0
+        nuevo_id = ultimo_id + 1
         filas_adicionales = []
         invoice = ""
         total = 0
@@ -3097,7 +3104,7 @@ class Usuario:
         lista.append(invoice)
         print(lista)
 
-        filas_adicionales.append(len(facturas)+1)
+        filas_adicionales.append(nuevo_id)
         filas_adicionales.append(self.usuario[0])
         filas_adicionales.append(datetime.date.today().strftime("%d/%m/%Y"))
         filas_adicionales.append(productos)
